@@ -4,6 +4,7 @@ import {
   Car, Plane, Package, Users, Navigation, PawPrint,
 } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
+import TiltCard from './ui/TiltCard';
 
 const iconMap: Record<string, React.ElementType> = {
   Stethoscope, Accessibility, Zap, Heart, Building2, MapPin,
@@ -33,7 +34,7 @@ export default function Services({ mode, content }: ServicesProps) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header — stacks on mobile */}
+        {/* Header */}
         <div className="mb-10 sm:mb-14 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 25 }}
@@ -75,51 +76,65 @@ export default function Services({ mode, content }: ServicesProps) {
             return (
               <motion.div
                 key={service.title}
-                className="group relative rounded-2xl p-5 sm:p-6 lg:p-7 overflow-hidden border cursor-default"
-                style={{
-                  backgroundColor: content.colors.surface,
-                  borderColor: `${content.colors.text}0a`,
-                }}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.4, delay: Math.min(i * 0.06, 0.25) }}
-                whileHover={{ y: -3, borderColor: `${content.colors.accent}40` }}
               >
-                {/* Number watermark */}
-                <span
-                  className="font-mono-display text-5xl font-bold absolute top-3 right-4 leading-none select-none pointer-events-none"
-                  style={{ color: `${content.colors.accent}10` }}
+                {/* TiltCard is disabled on touch devices via pointer coarse check — it just renders flat */}
+                <TiltCard
+                  className="group relative rounded-2xl p-5 sm:p-6 lg:p-7 overflow-hidden border cursor-default h-full transition-all duration-300"
+                  style={{
+                    backgroundColor: content.colors.surface,
+                    borderColor: `${content.colors.text}0a`,
+                    /* gradient border via box-shadow on hover handled by motion */
+                  }}
+                  intensity={8}
                 >
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+                  {/* Gradient border overlay — visible on hover via group */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: `linear-gradient(135deg, ${content.colors.accent}30, transparent 60%)`,
+                      border: `1px solid ${content.colors.accent}40`,
+                    }}
+                  />
 
-                {/* Icon — 44px touch-safe */}
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ backgroundColor: `${content.colors.accent}18` }}
-                >
-                  <Icon size={20} style={{ color: content.colors.accent }} />
-                </div>
+                  {/* Number watermark */}
+                  <span
+                    className="font-mono-display text-5xl font-bold absolute top-3 right-4 leading-none select-none pointer-events-none"
+                    style={{ color: `${content.colors.accent}10` }}
+                  >
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
 
-                <h3
-                  className="font-grotesk text-base font-bold mb-2"
-                  style={{ color: content.colors.text }}
-                >
-                  {service.title}
-                </h3>
-                <p className="text-sm leading-relaxed" style={{ color: content.colors.muted }}>
-                  {service.description}
-                </p>
+                  {/* Icon */}
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 relative"
+                    style={{ backgroundColor: `${content.colors.accent}18` }}
+                  >
+                    <Icon size={20} style={{ color: content.colors.accent }} />
+                  </div>
 
-                {/* Bottom line reveal on hover (desktop only) */}
-                <motion.div
-                  className="absolute bottom-0 left-0 h-[2px] hidden sm:block"
-                  style={{ backgroundColor: content.colors.accent }}
-                  initial={{ width: 0 }}
-                  whileHover={{ width: '100%' }}
-                  transition={{ duration: 0.3 }}
-                />
+                  <h3
+                    className="font-grotesk text-base font-bold mb-2 relative"
+                    style={{ color: content.colors.text }}
+                  >
+                    {service.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed relative" style={{ color: content.colors.muted }}>
+                    {service.description}
+                  </p>
+
+                  {/* Bottom accent line — desktop hover */}
+                  <motion.div
+                    className="absolute bottom-0 left-0 h-[2px] hidden sm:block"
+                    style={{ backgroundColor: content.colors.accent }}
+                    initial={{ width: 0 }}
+                    whileHover={{ width: '100%' }}
+                    transition={{ duration: 0.35 }}
+                  />
+                </TiltCard>
               </motion.div>
             );
           })}

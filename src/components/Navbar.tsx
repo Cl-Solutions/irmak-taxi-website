@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone, Heart, Car } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
+import { useActiveSection } from '../hooks/useActiveSection';
 
 interface NavbarProps {
   mode: Mode;
@@ -10,15 +11,16 @@ interface NavbarProps {
 }
 
 const navLinks = [
-  { href: '#services', label: 'Leistungen' },
-  { href: '#why-us', label: 'Warum wir' },
-  { href: '#contact', label: 'Kontakt' },
+  { href: '#services', label: 'Leistungen', id: 'services' },
+  { href: '#why-us', label: 'Warum wir', id: 'why-us' },
+  { href: '#contact', label: 'Kontakt', id: 'contact' },
 ];
 
 export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const isKranken = mode === 'krankenfahrten';
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -26,7 +28,6 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close menu on resize to desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 1024) setMenuOpen(false); };
     window.addEventListener('resize', onResize);
@@ -35,15 +36,16 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
 
   return (
     <motion.header
-      className="fixed top-0 left-0 right-0 z-50 glass-dark"
+      className="fixed top-0 left-0 right-0 z-50"
       animate={{
-        backgroundColor: scrolled ? 'rgba(0,0,0,0.80)' : 'rgba(0,0,0,0.35)',
-        boxShadow: scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
+        backgroundColor: scrolled ? 'rgba(0,0,0,0.88)' : 'rgba(0,0,0,0.28)',
+        backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(130%)',
+        WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(130%)',
+        boxShadow: scrolled ? `0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.35)` : 'none',
       }}
       transition={{ duration: 0.3 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* h-16 on all screens — consistent 64px */}
         <div className="flex items-center justify-between h-16 gap-3">
 
           {/* Logo */}
@@ -68,19 +70,16 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
                 )}
               </AnimatePresence>
             </div>
-            {/* Hide text on small mobile to save space for toggle */}
             <span className="font-grotesk font-bold text-white text-sm hidden sm:block leading-tight">
               Irmak Transport
             </span>
           </motion.button>
 
-          {/* ── MODE TOGGLE — center, always visible ── */}
-          {/* On 375px: icon + short text fits within available space */}
+          {/* Mode toggle — always visible, center */}
           <div
             className="flex items-stretch rounded-xl overflow-hidden border flex-1 sm:flex-none max-w-[220px] sm:max-w-none"
             style={{ borderColor: 'rgba(255,255,255,0.12)' }}
           >
-            {/* Krankenfahrten pill */}
             <motion.button
               onClick={() => onModeChange('krankenfahrten')}
               className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk transition-colors duration-200 outline-none flex-1 sm:flex-none min-h-[44px]"
@@ -91,15 +90,12 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
               whileTap={{ scale: 0.96 }}
             >
               <Heart size={12} strokeWidth={2.5} className="shrink-0" />
-              {/* "Kranken" on mobile, full word on sm+ */}
               <span className="sm:hidden">Kranken</span>
               <span className="hidden sm:inline">Krankenfahrten</span>
             </motion.button>
 
-            {/* Divider */}
             <div className="w-px shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.12)' }} />
 
-            {/* Taxi pill */}
             <motion.button
               onClick={() => onModeChange('taxi')}
               className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk transition-colors duration-200 outline-none flex-1 sm:flex-none min-h-[44px]"
@@ -114,23 +110,43 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             </motion.button>
           </div>
 
-          {/* Desktop: Nav links + CTA */}
+          {/* Desktop nav links */}
           <div className="hidden lg:flex items-center gap-6 shrink-0">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium transition-colors duration-200"
-                style={{ color: 'rgba(255,255,255,0.5)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = content.colors.accent)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="relative text-sm font-medium transition-colors duration-200 py-1"
+                  style={{ color: isActive ? content.colors.accent : 'rgba(255,255,255,0.5)' }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = isActive ? content.colors.accent : 'rgba(255,255,255,0.5)';
+                  }}
+                >
+                  {link.label}
+                  {/* Active underline dot */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.span
+                        className="absolute -bottom-0.5 left-0 right-0 h-[2px] rounded-full"
+                        style={{ backgroundColor: content.colors.accent }}
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        animate={{ scaleX: 1, opacity: 1 }}
+                        exit={{ scaleX: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                      />
+                    )}
+                  </AnimatePresence>
+                </a>
+              );
+            })}
             <motion.a
               href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold font-grotesk min-h-[44px]"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold font-grotesk min-h-[44px] relative overflow-hidden"
               style={{
                 backgroundColor: content.colors.accent,
                 color: isKranken ? '#fff' : '#000',
@@ -143,7 +159,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             </motion.a>
           </div>
 
-          {/* Mobile hamburger — 44px tap target */}
+          {/* Mobile hamburger */}
           <button
             className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl shrink-0 text-white/70"
             style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
@@ -155,7 +171,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
         </div>
       </div>
 
-      {/* Mobile dropdown menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -164,19 +180,26 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22 }}
             className="lg:hidden overflow-hidden border-t"
-            style={{ backgroundColor: 'rgba(0,0,0,0.95)', borderColor: 'rgba(255,255,255,0.08)' }}
+            style={{ backgroundColor: 'rgba(0,0,0,0.96)', borderColor: 'rgba(255,255,255,0.08)' }}
           >
             <div className="px-4 py-4 flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center min-h-[48px] px-2 text-sm font-medium text-white/70 rounded-xl"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center min-h-[48px] px-3 text-sm font-medium rounded-xl transition-colors"
+                    style={{
+                      color: isActive ? content.colors.accent : 'rgba(255,255,255,0.65)',
+                      backgroundColor: isActive ? `${content.colors.accent}10` : 'transparent',
+                    }}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
               <a
                 href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
                 className="flex items-center justify-center gap-2 mt-2 min-h-[52px] rounded-xl text-sm font-bold font-grotesk"

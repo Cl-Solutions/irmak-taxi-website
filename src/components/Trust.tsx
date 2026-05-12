@@ -2,14 +2,30 @@ import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
 import { IMAGES } from '../data/content';
+import AnimatedCounter from './ui/AnimatedCounter';
 
 interface TrustProps {
   mode: Mode;
   content: ModeContent;
 }
 
+const taxiStats = [
+  { value: 500, suffix: '+', label: 'Fahrten / Monat' },
+  { value: 24, suffix: '/7', label: 'Erreichbar' },
+  { value: 8, suffix: '+', label: 'Jahre Erfahrung' },
+  { value: 3, suffix: '', label: 'Standorte' },
+];
+
+const krankenStats = [
+  { value: 10, suffix: '+', label: 'Jahre Erfahrung' },
+  { value: 100, suffix: '%', label: 'GKV-Abrechnung' },
+  { value: 24, suffix: '/7', label: 'Notfall-Bereitschaft' },
+  { value: 2, suffix: '', label: 'Regionen' },
+];
+
 export default function Trust({ mode, content }: TrustProps) {
   const isKranken = mode === 'krankenfahrten';
+  const stats = isKranken ? krankenStats : taxiStats;
 
   return (
     <section
@@ -54,8 +70,50 @@ export default function Trust({ mode, content }: TrustProps) {
           </h2>
         </motion.div>
 
-        {/* Testimonials — 1 col mobile, 3 col lg */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* ── Animated stat counters ── */}
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-14"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              className="relative p-4 sm:p-6 rounded-2xl border overflow-hidden text-center"
+              style={{
+                backgroundColor: `${content.colors.surface}80`,
+                borderColor: `${content.colors.text}0a`,
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+              }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
+              whileHover={{ borderColor: `${content.colors.accent}35` }}
+            >
+              {/* glow on hover */}
+              <div
+                className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse at center, ${content.colors.accent}10, transparent 70%)` }}
+              />
+              <div
+                className="font-grotesk text-2xl sm:text-3xl font-bold mb-1 leading-none"
+                style={{ color: content.colors.accent }}
+              >
+                <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.6} />
+              </div>
+              <div className="text-xs sm:text-sm font-medium" style={{ color: content.colors.muted }}>
+                {stat.label}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Testimonials */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 sm:mb-10">
           {content.testimonials.map((t, i) => (
             <motion.div
               key={i}
@@ -102,10 +160,10 @@ export default function Trust({ mode, content }: TrustProps) {
           ))}
         </div>
 
-        {/* Taxi: Location cards (1 col → 3 col) */}
+        {/* Taxi: Location cards */}
         {!isKranken && (
           <motion.div
-            className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -121,7 +179,7 @@ export default function Trust({ mode, content }: TrustProps) {
                 href={`tel:${loc.phone.replace(/\s/g, '')}`}
                 className="group relative overflow-hidden rounded-2xl border"
                 style={{ borderColor: `${content.colors.text}0a` }}
-                whileHover={{ borderColor: `${content.colors.accent}50`, y: -2 }}
+                whileHover={{ borderColor: `${content.colors.accent}50`, y: -3 }}
               >
                 <img
                   src={loc.img}
@@ -142,10 +200,10 @@ export default function Trust({ mode, content }: TrustProps) {
           </motion.div>
         )}
 
-        {/* Krankenfahrten: trust badges (2 col mobile, 4 col sm+) */}
+        {/* Krankenfahrten: trust badges */}
         {isKranken && (
           <motion.div
-            className="mt-8 sm:mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
+            className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
