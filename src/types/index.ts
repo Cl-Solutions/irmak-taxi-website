@@ -12,6 +12,17 @@ export interface USP {
   description: string;
 }
 
+export interface Stat {
+  value: string;
+  label: string;
+}
+
+export interface Testimonial {
+  text: string;
+  author: string;
+  stars: number;
+}
+
 export interface ContactInfo {
   phones: { label: string; number: string }[];
   email: string;
@@ -25,6 +36,9 @@ export interface ModeContent {
   subheadline: string;
   ctaPrimary: string;
   ctaSecondary: string;
+  heroImage: string;
+  stats: Stat[];
+  testimonials: Testimonial[];
   services: Service[];
   usps: USP[];
   contact: ContactInfo;
@@ -32,6 +46,7 @@ export interface ModeContent {
     primary: string;
     secondary: string;
     accent: string;
+    accentLight: string;
     bg: string;
     surface: string;
     text: string;

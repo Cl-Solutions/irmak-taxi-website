@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import type { Mode, ModeContent } from '../types';
 
@@ -23,176 +23,149 @@ export default function Contact({ mode, content }: ContactProps) {
   return (
     <section
       id="contact"
-      className="py-24 lg:py-32"
-      style={{ backgroundColor: content.colors.bg }}
+      className="py-28 relative"
+      style={{ backgroundColor: content.colors.secondary }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55 }}
         >
-          <div
-            className="inline-block text-xs font-bold tracking-widest uppercase mb-4 px-4 py-1.5 rounded-full"
-            style={{
-              backgroundColor: `${content.colors.accent}15`,
-              color: content.colors.accent,
-            }}
+          <span
+            className="font-mono-display text-xs tracking-widest uppercase mb-4 block"
+            style={{ color: content.colors.accent }}
           >
-            Kontakt & Buchung
-          </div>
+            — Kontakt & Buchung
+          </span>
           <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
+            className="font-grotesk text-4xl lg:text-5xl font-bold"
             style={{ color: content.colors.text }}
           >
             Wir sind für Sie da
           </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: content.colors.muted }}>
-            {isKranken
-              ? 'Zögern Sie nicht — rufen Sie uns an oder schreiben Sie uns.'
-              : 'Rufen Sie uns an oder senden Sie uns eine Nachricht.'}
-          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left: Contact Info */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+
+          {/* Left — phone numbers prominent + details */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.55 }}
           >
-            {/* Phone numbers — prominent */}
-            <div className="mb-8">
-              <p
-                className="text-xs font-bold tracking-widest uppercase mb-4"
-                style={{ color: content.colors.muted }}
-              >
-                Telefon
-              </p>
-              <div className="flex flex-col gap-3">
-                {content.contact.phones.map((phone) => (
-                  <motion.a
-                    key={phone.number}
-                    href={`tel:${phone.number.replace(/\s/g, '')}`}
-                    className="flex items-center gap-4 p-5 rounded-2xl border group"
-                    style={{
-                      backgroundColor: content.colors.surface,
-                      borderColor: `${content.colors.text}10`,
-                    }}
-                    whileHover={{
-                      borderColor: `${content.colors.accent}50`,
-                      x: 4,
-                    }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: `${content.colors.accent}20` }}
-                    >
-                      <Phone size={20} style={{ color: content.colors.accent }} />
-                    </div>
-                    <div>
-                      <div className="text-xs mb-0.5" style={{ color: content.colors.muted }}>
-                        {phone.label}
-                      </div>
-                      <div
-                        className="text-xl font-black tracking-tight"
-                        style={{ color: content.colors.text }}
-                      >
-                        {phone.number}
-                      </div>
-                    </div>
-                    <motion.div
-                      className="ml-auto text-xs font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100"
-                      style={{
-                        backgroundColor: content.colors.accent,
-                        color: isKranken ? '#fff' : '#000',
-                      }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      Anrufen →
-                    </motion.div>
-                  </motion.a>
-                ))}
-              </div>
-            </div>
+            <p className="font-mono-display text-xs tracking-widest uppercase mb-5" style={{ color: content.colors.muted }}>
+              Telefon
+            </p>
 
-            {/* Other contact details */}
-            <div className="flex flex-col gap-4">
-              {[
-                { icon: Mail, label: 'E-Mail', value: content.contact.email },
-                { icon: MapPin, label: 'Adresse', value: content.contact.address },
-                { icon: Clock, label: 'Öffnungszeiten', value: content.contact.hours },
-              ].map(({ icon: Icon, label, value }) => (
-                <motion.div
-                  key={label}
-                  className="flex items-start gap-4 p-4 rounded-xl"
-                  style={{ backgroundColor: `${content.colors.surface}60` }}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+            <div className="flex flex-col gap-3 mb-8">
+              {content.contact.phones.map((phone, i) => (
+                <motion.a
+                  key={phone.number}
+                  href={`tel:${phone.number.replace(/\s/g, '')}`}
+                  className="group flex items-center gap-4 p-5 rounded-2xl border"
+                  style={{
+                    backgroundColor: i === 0 ? `${content.colors.accent}12` : content.colors.surface,
+                    borderColor: i === 0 ? `${content.colors.accent}35` : `${content.colors.text}08`,
+                  }}
+                  whileHover={{ x: 4, borderColor: `${content.colors.accent}60` }}
+                  transition={{ duration: 0.18 }}
                 >
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `${content.colors.accent}20` }}
+                  >
+                    <Phone size={18} style={{ color: content.colors.accent }} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs mb-0.5" style={{ color: content.colors.muted }}>
+                      {phone.label}
+                    </div>
+                    <div
+                      className="font-mono-display font-bold text-xl tracking-tight"
+                      style={{ color: content.colors.text }}
+                    >
+                      {phone.number}
+                    </div>
+                  </div>
+                  <ChevronRight
+                    size={18}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    style={{ color: content.colors.accent }}
+                  />
+                </motion.a>
+              ))}
+            </div>
+
+            {/* Other info */}
+            <div className="grid grid-cols-1 gap-3">
+              {[
+                { Icon: Mail, label: 'E-Mail', value: content.contact.email },
+                { Icon: MapPin, label: 'Adresse', value: content.contact.address },
+                { Icon: Clock, label: 'Erreichbarkeit', value: content.contact.hours },
+              ].map(({ Icon, label, value }) => (
+                <div
+                  key={label}
+                  className="flex items-start gap-4 p-4 rounded-xl"
+                  style={{ backgroundColor: `${content.colors.surface}70` }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
                     style={{ backgroundColor: `${content.colors.accent}15` }}
                   >
-                    <Icon size={16} style={{ color: content.colors.accent }} />
+                    <Icon size={14} style={{ color: content.colors.accent }} />
                   </div>
                   <div>
-                    <div
-                      className="text-xs font-semibold mb-0.5"
-                      style={{ color: content.colors.muted }}
-                    >
+                    <div className="text-xs font-semibold mb-0.5" style={{ color: content.colors.muted }}>
                       {label}
                     </div>
                     <div className="text-sm font-medium" style={{ color: content.colors.text }}>
                       {value}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Right: Form */}
+          {/* Right — form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.55 }}
           >
             <div
-              className="p-8 rounded-3xl border"
+              className="p-7 lg:p-9 rounded-2xl border"
               style={{
-                backgroundColor: content.colors.surface,
-                borderColor: `${content.colors.text}10`,
+                backgroundColor: `${content.colors.surface}`,
+                borderColor: `${content.colors.text}0a`,
               }}
             >
               <h3
-                className="text-xl font-bold mb-6"
+                className="font-grotesk text-xl font-bold mb-1"
                 style={{ color: content.colors.text }}
               >
                 Rückruf anfordern
               </h3>
+              <p className="text-sm mb-7" style={{ color: content.colors.muted }}>
+                Wir melden uns so schnell wie möglich bei Ihnen.
+              </p>
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 {[
                   { id: 'name', label: 'Ihr Name', type: 'text', placeholder: 'Max Mustermann' },
-                  {
-                    id: 'phone',
-                    label: 'Telefonnummer',
-                    type: 'tel',
-                    placeholder: '07252 123456',
-                  },
+                  { id: 'phone', label: 'Telefonnummer', type: 'tel', placeholder: '07252 123456' },
                 ].map((field) => (
                   <div key={field.id}>
                     <label
                       htmlFor={field.id}
-                      className="block text-sm font-semibold mb-2"
+                      className="block text-xs font-bold tracking-wide uppercase mb-2"
                       style={{ color: content.colors.muted }}
                     >
                       {field.label}
@@ -204,18 +177,14 @@ export default function Contact({ mode, content }: ContactProps) {
                       value={form[field.id as 'name' | 'phone']}
                       onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
                       required
-                      className="w-full px-4 py-3 rounded-xl border outline-none transition-all duration-200 text-sm"
+                      className="w-full px-4 py-3 rounded-xl border outline-none text-sm font-grotesk transition-all"
                       style={{
-                        backgroundColor: `${content.colors.bg}80`,
-                        borderColor: `${content.colors.text}15`,
+                        backgroundColor: `${content.colors.bg}`,
+                        borderColor: `${content.colors.text}12`,
                         color: content.colors.text,
                       }}
-                      onFocus={(e) =>
-                        (e.target.style.borderColor = content.colors.accent)
-                      }
-                      onBlur={(e) =>
-                        (e.target.style.borderColor = `${content.colors.text}15`)
-                      }
+                      onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
+                      onBlur={(e) => (e.target.style.borderColor = `${content.colors.text}12`)}
                     />
                   </div>
                 ))}
@@ -223,7 +192,7 @@ export default function Contact({ mode, content }: ContactProps) {
                 <div>
                   <label
                     htmlFor="message"
-                    className="block text-sm font-semibold mb-2"
+                    className="block text-xs font-bold tracking-wide uppercase mb-2"
                     style={{ color: content.colors.muted }}
                   >
                     Nachricht (optional)
@@ -233,44 +202,33 @@ export default function Contact({ mode, content }: ContactProps) {
                     placeholder={
                       isKranken
                         ? 'Art der Fahrt, Datum, besondere Anforderungen...'
-                        : 'Ziel, Datum, Uhrzeit, Personenanzahl...'
+                        : 'Ziel, Datum, Uhrzeit, Personen...'
                     }
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border outline-none transition-all duration-200 text-sm resize-none"
+                    className="w-full px-4 py-3 rounded-xl border outline-none text-sm font-grotesk resize-none transition-all"
                     style={{
-                      backgroundColor: `${content.colors.bg}80`,
-                      borderColor: `${content.colors.text}15`,
+                      backgroundColor: `${content.colors.bg}`,
+                      borderColor: `${content.colors.text}12`,
                       color: content.colors.text,
                     }}
-                    onFocus={(e) =>
-                      (e.target.style.borderColor = content.colors.accent)
-                    }
-                    onBlur={(e) =>
-                      (e.target.style.borderColor = `${content.colors.text}15`)
-                    }
+                    onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
+                    onBlur={(e) => (e.target.style.borderColor = `${content.colors.text}12`)}
                   />
                 </div>
 
                 <motion.button
                   type="submit"
-                  className="flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-sm mt-2"
+                  className="flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold font-grotesk text-sm mt-1"
                   style={{
                     backgroundColor: content.colors.accent,
                     color: isKranken ? '#fff' : '#000',
                   }}
-                  whileHover={{ scale: 1.02, opacity: 0.9 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  {sent ? (
-                    '✓ Anfrage gesendet!'
-                  ) : (
-                    <>
-                      <Send size={16} />
-                      Rückruf anfordern
-                    </>
-                  )}
+                  {sent ? '✓ Anfrage gesendet!' : <><Send size={15} /> Rückruf anfordern</>}
                 </motion.button>
               </form>
             </div>

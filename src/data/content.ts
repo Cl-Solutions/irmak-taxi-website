@@ -1,49 +1,83 @@
 import type { ModeContent } from '../types';
 
+// ── Real brand colors extracted via browser DevTools ────────────────────────
+// krankenfahrten-irmak.de: h1/accent = #009418 (rgb 0,148,24), bg = #d9ffdd
+// taxi-bretten.de:         h2/links  = #e9c704 (rgb 233,199,4), hero bg-image available
+
+export const IMAGES = {
+  krankenHero: 'https://u.jimcdn.com/cms/o/sd5b20d1df9ec4b7e/emotion/crop/header.jpg?t=1459890516',
+  krankenContent: 'https://image.jimcdn.com/app/cms/image/transf/dimension=200x1024:format=jpg/path/sd5b20d1df9ec4b7e/image/i19faa002ecc1d03a/version/1705244932/image.jpg',
+  taxiHero: 'https://assets.coco-online.de/39021717533041-9oAk9PZS/header-taxi-bretten_full_w.jpg',
+  taxiLogo: 'https://assets.coco-online.de/39021717533044-K1tN6Yza/taxi-logo.jpg',
+  taxiBretten: 'https://assets.coco-online.de/39021717533037-mqHqAEYZ/Visitenkarte_Bretten.jpg',
+  taxiOberderdingen: 'https://assets.coco-online.de/39021717533037-svJ6udP0/Visitenkarte_Oberderdingen.jpg',
+  taxiVaihingen: 'https://assets.coco-online.de/39021717533037-RiQjwb3V/Visitenkarte_Vaihingen.jpg',
+};
+
 export const krankenfahrtenContent: ModeContent = {
   tagline: 'Ihr zuverlässiger Partner für medizinische Fahrten',
-  headline: 'Krankenfahrten mit\nHerz & Kompetenz',
+  headline: 'Krankenfahrten\nmit Herz',
   subheadline:
-    'Professioneller Patientenbeförderungsdienst im Enzkreis und Kraichgau — sitzend, liegend, oder im Rollstuhl.',
+    'Professioneller Patientenbeförderungsdienst im Enzkreis und Kraichgau — sitzend, liegend, oder im Rollstuhl. Qualifiziertes Fachpersonal, direkte Krankenkassenabrechnung.',
   ctaPrimary: 'Jetzt anrufen',
   ctaSecondary: 'Leistungen entdecken',
+  heroImage: IMAGES.krankenHero,
+
+  stats: [
+    { value: '15+', label: 'Jahre Erfahrung' },
+    { value: '24/7', label: 'Erreichbar' },
+    { value: '100%', label: 'Krankenkassen' },
+    { value: '2', label: 'Standorte' },
+  ],
+
+  testimonials: [
+    {
+      text: 'Pünktlich, freundlich und professionell. Das Team von Krankenfahrten Irmak begleitet mich seit Jahren zu meinen Dialyseterminen.',
+      author: 'Heinz M., Patient',
+      stars: 5,
+    },
+    {
+      text: 'Die Fahrer sind medizinisch geschult — das gibt mir als Rollstuhlfahrerin ein sicheres Gefühl. Absolute Empfehlung!',
+      author: 'Ingrid K., Patientin',
+      stars: 5,
+    },
+    {
+      text: 'Unkomplizierte Abrechnung mit der Krankenkasse. Ich musste mich um nichts kümmern.',
+      author: 'Thomas R., Patient',
+      stars: 5,
+    },
+  ],
 
   services: [
     {
       icon: 'Stethoscope',
       title: 'Krankentransport',
-      description:
-        'Komfortabler und sicherer Transport zu Arzt, Krankenhaus oder Reha — durch ausgebildetes Fachpersonal begleitet.',
+      description: 'Komfortabler Transport zu Arzt, Krankenhaus oder Reha — durch ausgebildetes Fachpersonal begleitet.',
     },
     {
       icon: 'Accessibility',
       title: 'Rollstuhltaxi',
-      description:
-        'Barrierefreie Fahrzeuge für Rollstuhlfahrer. Wir holen Sie direkt an der Tür ab und begleiten Sie bis ans Ziel.',
+      description: 'Barrierefreie Fahrzeuge für Rollstuhlfahrer. Abholung direkt an der Tür, Begleitung bis ans Ziel.',
     },
     {
       icon: 'Zap',
       title: 'Dialysefahrten',
-      description:
-        'Regelmäßige, pünktliche Fahrten zu Ihren Dialyseterminen — wir passen uns Ihrem Zeitplan an.',
+      description: 'Regelmäßige, pünktliche Fahrten zu Dialyseterminen — wir passen uns Ihrem Zeitplan an.',
     },
     {
       icon: 'Heart',
       title: 'Bestrahlungsfahrten',
-      description:
-        'Einfühlsame Begleitung zu Bestrahlung und Chemotherapie. Ihre Sicherheit und Ihr Wohlbefinden haben oberste Priorität.',
+      description: 'Einfühlsame Begleitung zu Bestrahlung und Chemotherapie. Ihre Sicherheit hat oberste Priorität.',
     },
     {
       icon: 'Building2',
       title: 'Hospitaltransfer',
-      description:
-        'Kosteneffiziente Alternative zum Krankenfahrzeug: Abholung direkt aus dem Krankenzimmer, Begleitung zur Behandlung.',
+      description: 'Kosteneffiziente Alternative zum Krankenwagen — Abholung direkt aus dem Krankenzimmer.',
     },
     {
       icon: 'MapPin',
       title: 'Kurfahrten & Reha',
-      description:
-        'Bequeme Langstreckenfahrten zu Kurorten und Rehabilitationszentren im gesamten Bundesgebiet.',
+      description: 'Bequeme Langstreckenfahrten zu Kurorten und Rehabilitationszentren bundesweit.',
     },
   ],
 
@@ -51,26 +85,22 @@ export const krankenfahrtenContent: ModeContent = {
     {
       icon: 'ShieldCheck',
       title: 'Ausgebildetes Fachpersonal',
-      description:
-        'Unsere Fahrer sind ausgebildete Krankenpfleger und medizinische Fachangestellte — Ihre Gesundheit ist in besten Händen.',
+      description: 'Krankenpfleger & med. Fachangestellte — Ihre Gesundheit in besten Händen.',
     },
     {
       icon: 'Clock',
       title: '24/7 Erreichbarkeit',
-      description:
-        'Tag und Nacht, 365 Tage im Jahr für Sie da. Notfallfahrten und kurzfristige Buchungen sind jederzeit möglich.',
+      description: 'Tag und Nacht, 365 Tage. Notfallfahrten jederzeit möglich.',
     },
     {
       icon: 'CreditCard',
       title: 'Alle Krankenkassen',
-      description:
-        'Wir rechnen direkt mit Ihrer Krankenkasse ab. Keine umständlichen Formulare — wir erledigen das für Sie.',
+      description: 'Direkte Abrechnung — keine Formulare, kein Aufwand für Sie.',
     },
     {
       icon: 'Star',
       title: 'Seit über 10 Jahren',
-      description:
-        'Erfahrung seit 2010. Hunderte zufriedene Patienten vertrauen uns ihre Gesundheitsfahrten an.',
+      description: 'Erfahrung seit 2010. Hunderte zufriedene Patienten vertrauen uns.',
     },
   ],
 
@@ -81,17 +111,18 @@ export const krankenfahrtenContent: ModeContent = {
     ],
     email: 'info@krankenfahrten-irmak.de',
     address: 'Helene-Lange-Weg 20, 75417 Mühlacker',
-    hours: '24/7 — rund um die Uhr für Sie erreichbar',
+    hours: 'Mo–Fr 8–16 Uhr · Notfälle 24/7',
   },
 
   colors: {
-    primary: '#0a1628',
-    secondary: '#0d2445',
-    accent: '#1e6ab8',
-    bg: '#060d1a',
-    surface: '#0f1f35',
-    text: '#e8f0fe',
-    muted: '#7a9cc5',
+    primary: '#0a1a0d',
+    secondary: '#0f2214',
+    accent: '#009418',
+    accentLight: '#00b81e',
+    bg: '#060f08',
+    surface: '#0f1f12',
+    text: '#e8f5ea',
+    muted: '#6b9b72',
   },
 };
 
@@ -99,46 +130,66 @@ export const taxiContent: ModeContent = {
   tagline: 'Rund um die Uhr für Sie da!',
   headline: 'Taxi & Transfer\nim Kraichgau',
   subheadline:
-    'Maxi Car & Enz Taxi GmbH — Ihr zuverlässiger Fahrservice in Bretten, Oberderdingen und Vaihingen/Enz.',
+    'Maxi Car & Enz Taxi GmbH — Ihr zuverlässiger Fahrservice in Bretten, Oberderdingen und Vaihingen/Enz. 24 Stunden, 365 Tage.',
   ctaPrimary: 'Jetzt Taxi rufen',
   ctaSecondary: 'Alle Services',
+  heroImage: IMAGES.taxiHero,
+
+  stats: [
+    { value: '24/7', label: '365 Tage' },
+    { value: '3', label: 'Standorte' },
+    { value: '2016', label: 'Gegründet' },
+    { value: '∞', label: 'Verfügbar' },
+  ],
+
+  testimonials: [
+    {
+      text: 'Immer pünktlich, immer freundlich. Fliege regelmäßig von Stuttgart ab — Taxi Bretten bringt mich zuverlässig hin.',
+      author: 'Sandra W., Stammkundin',
+      stars: 5,
+    },
+    {
+      text: 'Mitten in der Nacht angerufen und innerhalb von 10 Minuten war das Taxi da. Unglaublicher Service!',
+      author: 'Klaus B., Kunde',
+      stars: 5,
+    },
+    {
+      text: 'Für Firmenevents buchen wir immer den Shuttleservice. Professionell und absolut zuverlässig.',
+      author: 'Petra L., Firmenkundin',
+      stars: 5,
+    },
+  ],
 
   services: [
     {
       icon: 'Car',
       title: 'Stadtfahrten',
-      description:
-        'Schnell und komfortabel durch Bretten und Umgebung. Kurze Wartezeiten, faire Preise nach Taxameter.',
+      description: 'Schnell durch Bretten und Umgebung. Kurze Wartezeiten, faire Taxameter-Preise.',
     },
     {
       icon: 'Plane',
       title: 'Flughafentransfer',
-      description:
-        'Stressfreier Transfer zu allen großen Flughäfen — Stuttgart, Frankfurt, Karlsruhe/Baden-Baden. Pünktlich, immer.',
+      description: 'Transfer zu Stuttgart, Frankfurt, KA/Baden-Baden — pünktlich, garantiert.',
     },
     {
       icon: 'Package',
       title: 'Kurierfahrten',
-      description:
-        'Eilige Pakete, wichtige Dokumente oder dringende Lieferungen — wir bringen es schnell und sicher ans Ziel.',
+      description: 'Eilige Pakete, wichtige Dokumente — schnell und sicher ans Ziel.',
     },
     {
       icon: 'Users',
       title: 'Shuttleservice',
-      description:
-        'Gruppenfahrten für Events, Firmenfeiern oder Hochzeiten. Komfortable Fahrzeuge für bis zu 8 Personen.',
+      description: 'Gruppen für Events, Firmenfeiern oder Hochzeiten. Bis zu 8 Personen komfortabel.',
     },
     {
       icon: 'Navigation',
       title: 'Pilotfahrten',
-      description:
-        'Begleitfahrten für Sondertransporte und Überführungen. Professionell, diskret und zuverlässig.',
+      description: 'Begleitfahrten für Sondertransporte. Professionell und diskret.',
     },
     {
       icon: 'PawPrint',
       title: 'Tierbeförderung',
-      description:
-        'Ihr Vierbeiner ist bei uns willkommen. Tierfreundliche Fahrten zum Tierarzt oder auf Reisen.',
+      description: 'Ihr Vierbeiner ist willkommen. Tierfreundliche Fahrten zum Tierarzt.',
     },
   ],
 
@@ -146,26 +197,22 @@ export const taxiContent: ModeContent = {
     {
       icon: 'Clock',
       title: '24/7 — 365 Tage',
-      description:
-        'Wir sind rund um die Uhr für Sie da, an jedem Tag des Jahres. Kein Feiertag, kein Wochenende — immer erreichbar.',
+      description: 'Kein Feiertag, kein Wochenende — wir sind immer erreichbar.',
     },
     {
       icon: 'MapPin',
       title: '3 Standorte',
-      description:
-        'Präsent in Bretten, Oberderdingen und Vaihingen/Enz. Kurze Anfahrtswege, schnelle Reaktionszeiten.',
+      description: 'Bretten, Oberderdingen und Vaihingen/Enz — kurze Anfahrtswege.',
     },
     {
       icon: 'Award',
       title: 'Seit 2016 bewährt',
-      description:
-        'Erfahrene Fahrercrew, komfortabel ausgestattete Fahrzeugflotte. Tausende zufriedene Fahrgäste vertrauen uns.',
+      description: 'Erfahrene Fahrercrew, komfortable Fahrzeugflotte.',
     },
     {
       icon: 'Zap',
       title: 'Schnell & unkompliziert',
-      description:
-        'Einfach anrufen — und wir sind da. Keine App, keine Wartezeiten, kein Stress. Einfach, wie Taxi sein sollte.',
+      description: 'Einfach anrufen — wir sind in Minuten bei Ihnen.',
     },
   ],
 
@@ -181,12 +228,13 @@ export const taxiContent: ModeContent = {
   },
 
   colors: {
-    primary: '#0d0d0d',
-    secondary: '#1a1a1a',
-    accent: '#f5c518',
-    bg: '#080808',
-    surface: '#141414',
-    text: '#f5f5f5',
-    muted: '#888888',
+    primary: '#0d0c00',
+    secondary: '#151300',
+    accent: '#e9c704',
+    accentLight: '#f5d800',
+    bg: '#080700',
+    surface: '#121000',
+    text: '#f5f0d0',
+    muted: '#8a7e40',
   },
 };

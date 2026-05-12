@@ -18,6 +18,7 @@ const navLinks = [
 export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const isKranken = mode === 'krankenfahrten';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -25,151 +26,130 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const isKranken = mode === 'krankenfahrten';
-  const accent = content.colors.accent;
-  const surface = content.colors.surface;
-
   return (
     <motion.header
-      className="fixed top-0 left-0 right-0 z-50"
-      style={{
-        backgroundColor: scrolled ? content.colors.secondary : 'transparent',
-        boxShadow: scrolled ? '0 2px 24px rgba(0,0,0,0.4)' : 'none',
-      }}
+      className="fixed top-0 left-0 right-0 z-50 glass-dark"
       animate={{
-        backgroundColor: scrolled ? content.colors.secondary : 'rgba(0,0,0,0)',
+        backgroundColor: scrolled ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.35)',
+        boxShadow: scrolled ? '0 1px 0 rgba(255,255,255,0.06)' : 'none',
       }}
       transition={{ duration: 0.3 }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between h-16 lg:h-18 gap-4">
 
           {/* Logo */}
-          <motion.div
-            className="flex items-center gap-3 cursor-pointer"
+          <motion.button
+            className="flex items-center gap-3 shrink-0"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             whileHover={{ scale: 1.02 }}
           >
-            <motion.div
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: accent }}
-              animate={{ backgroundColor: accent }}
-              transition={{ duration: 0.5 }}
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: content.colors.accent }}
             >
               <AnimatePresence mode="wait">
                 {isKranken ? (
-                  <motion.div
-                    key="kranken-icon"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Heart size={20} color={isKranken ? '#fff' : '#000'} strokeWidth={2.5} />
+                  <motion.div key="k" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ duration: 0.15 }}>
+                    <Heart size={16} color="#fff" strokeWidth={2.5} />
                   </motion.div>
                 ) : (
-                  <motion.div
-                    key="taxi-icon"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Car size={20} color="#000" strokeWidth={2.5} />
+                  <motion.div key="t" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ duration: 0.15 }}>
+                    <Car size={16} color="#000" strokeWidth={2.5} />
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
-            <div>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={`name-${mode}`}
-                  className="font-bold text-white leading-tight text-sm lg:text-base"
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  {isKranken ? 'Krankenfahrten Irmak' : 'Maxi Taxi Bretten'}
-                </motion.p>
-              </AnimatePresence>
-              <p className="text-xs" style={{ color: content.colors.muted }}>
-                Irmak Transport GmbH
-              </p>
             </div>
-          </motion.div>
+            <span className="font-grotesk font-bold text-white text-sm hidden sm:block leading-tight">
+              Irmak Transport
+            </span>
+          </motion.button>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-8">
+          {/* ── PROMINENT MODE TOGGLE — always visible center ── */}
+          <div
+            className="flex items-stretch rounded-xl overflow-hidden border shrink-0"
+            style={{ borderColor: 'rgba(255,255,255,0.12)' }}
+          >
+            {/* Krankenfahrten pill */}
+            <motion.button
+              onClick={() => onModeChange('krankenfahrten')}
+              className="relative flex items-center gap-2 px-3 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold font-grotesk transition-colors duration-200 outline-none"
+              style={{
+                backgroundColor: isKranken ? '#009418' : 'rgba(0,0,0,0.4)',
+                color: isKranken ? '#fff' : 'rgba(255,255,255,0.45)',
+              }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <Heart size={13} strokeWidth={2.5} />
+              <span className="hidden xs:inline">Krankenfahrten</span>
+              <span className="xs:hidden">Kranken</span>
+              {isKranken && (
+                <motion.span
+                  layoutId="active-dot"
+                  className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-white opacity-60"
+                />
+              )}
+            </motion.button>
+
+            {/* Divider */}
+            <div className="w-px" style={{ backgroundColor: 'rgba(255,255,255,0.12)' }} />
+
+            {/* Taxi pill */}
+            <motion.button
+              onClick={() => onModeChange('taxi')}
+              className="relative flex items-center gap-2 px-3 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold font-grotesk transition-colors duration-200 outline-none"
+              style={{
+                backgroundColor: !isKranken ? '#e9c704' : 'rgba(0,0,0,0.4)',
+                color: !isKranken ? '#000' : 'rgba(255,255,255,0.45)',
+              }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <Car size={13} strokeWidth={2.5} />
+              Taxi
+              {!isKranken && (
+                <motion.span
+                  layoutId="active-dot"
+                  className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-black opacity-40"
+                />
+              )}
+            </motion.button>
+          </div>
+
+          {/* Right: Nav links + CTA */}
+          <div className="hidden lg:flex items-center gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium transition-colors duration-200 hover:opacity-100"
-                style={{ color: content.colors.muted }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = content.colors.text)}
-                onMouseLeave={(e) => (e.currentTarget.style.color = content.colors.muted)}
+                className="text-sm font-medium transition-colors duration-200"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = content.colors.accent)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.5)')}
               >
                 {link.label}
               </a>
             ))}
-          </nav>
-
-          {/* Right: Mode Toggle + CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            {/* Mode Toggle */}
-            <div
-              className="flex items-center rounded-full p-1 gap-1"
-              style={{ backgroundColor: surface }}
-            >
-              <motion.button
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300"
-                style={{
-                  backgroundColor: isKranken ? '#1e6ab8' : 'transparent',
-                  color: isKranken ? '#fff' : content.colors.muted,
-                }}
-                onClick={() => onModeChange('krankenfahrten')}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Heart size={12} />
-                Krankenfahrten
-              </motion.button>
-              <motion.button
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300"
-                style={{
-                  backgroundColor: !isKranken ? '#f5c518' : 'transparent',
-                  color: !isKranken ? '#000' : content.colors.muted,
-                }}
-                onClick={() => onModeChange('taxi')}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Car size={12} />
-                Taxi
-              </motion.button>
-            </div>
-
-            {/* CTA */}
             <motion.a
               href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
-              style={{ backgroundColor: accent, color: isKranken ? '#fff' : '#000' }}
-              whileHover={{ scale: 1.05, opacity: 0.9 }}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold font-grotesk"
+              style={{
+                backgroundColor: content.colors.accent,
+                color: isKranken ? '#fff' : '#000',
+              }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              animate={{ backgroundColor: accent }}
-              transition={{ duration: 0.5 }}
             >
-              <Phone size={14} />
+              <Phone size={13} />
               Anrufen
             </motion.a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile hamburger */}
           <button
-            className="lg:hidden p-2 rounded-lg"
-            style={{ color: content.colors.text }}
+            className="lg:hidden p-2 text-white/70 shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -181,55 +161,27 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden overflow-hidden"
-            style={{ backgroundColor: content.colors.secondary }}
+            transition={{ duration: 0.25 }}
+            className="lg:hidden overflow-hidden border-t"
+            style={{ backgroundColor: 'rgba(0,0,0,0.92)', borderColor: 'rgba(255,255,255,0.08)' }}
           >
-            <div className="px-4 pb-4 pt-2 flex flex-col gap-4">
+            <div className="px-4 py-5 flex flex-col gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium py-2 border-b"
-                  style={{ color: content.colors.text, borderColor: content.colors.surface }}
+                  className="text-sm font-medium py-2 text-white/70"
                   onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
-
-              {/* Mobile Mode Toggle */}
-              <div className="flex gap-2 pt-2">
-                <button
-                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-semibold transition-all"
-                  style={{
-                    backgroundColor: isKranken ? '#1e6ab8' : content.colors.surface,
-                    color: isKranken ? '#fff' : content.colors.muted,
-                  }}
-                  onClick={() => { onModeChange('krankenfahrten'); setMenuOpen(false); }}
-                >
-                  <Heart size={14} />
-                  Krankenfahrten
-                </button>
-                <button
-                  className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-semibold transition-all"
-                  style={{
-                    backgroundColor: !isKranken ? '#f5c518' : content.colors.surface,
-                    color: !isKranken ? '#000' : content.colors.muted,
-                  }}
-                  onClick={() => { onModeChange('taxi'); setMenuOpen(false); }}
-                >
-                  <Car size={14} />
-                  Taxi
-                </button>
-              </div>
-
               <a
                 href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-                className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold"
-                style={{ backgroundColor: accent, color: isKranken ? '#fff' : '#000' }}
+                className="flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold"
+                style={{ backgroundColor: content.colors.accent, color: isKranken ? '#fff' : '#000' }}
               >
-                <Phone size={16} />
+                <Phone size={15} />
                 {content.contact.phones[0].number}
               </a>
             </div>

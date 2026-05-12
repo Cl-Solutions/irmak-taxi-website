@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { ShieldCheck, Clock, CreditCard, Star, Award, Zap } from 'lucide-react';
+import { ShieldCheck, Clock, CreditCard, Star, Award, Zap, MapPin } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
 
 const iconMap: Record<string, React.ElementType> = {
-  ShieldCheck, Clock, CreditCard, Star, Award, Zap,
+  ShieldCheck, Clock, CreditCard, Star, Award, Zap, MapPin,
 };
 
 interface WhyUsProps {
@@ -17,85 +17,88 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
   return (
     <section
       id="why-us"
-      className="py-24 lg:py-32 relative overflow-hidden"
-      style={{ backgroundColor: content.colors.secondary }}
+      className="py-28 relative overflow-hidden"
+      style={{ backgroundColor: content.colors.bg }}
     >
-      {/* Decorative background shape */}
+      {/* Glow blobs */}
       <motion.div
-        className="absolute -left-64 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20"
-        style={{ backgroundColor: content.colors.accent }}
-        animate={{ scale: [1, 1.15, 1], opacity: [0.15, 0.25, 0.15] }}
-        transition={{ duration: 6, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute -right-64 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-10"
-        style={{ backgroundColor: content.colors.accent }}
-        animate={{ scale: [1.15, 1, 1.15], opacity: [0.1, 0.2, 0.1] }}
-        transition={{ duration: 6, repeat: Infinity }}
+        className="absolute -right-48 top-1/3 w-96 h-96 rounded-full blur-3xl pointer-events-none"
+        style={{ backgroundColor: content.colors.accent, opacity: 0.06 }}
+        animate={{ scale: [1, 1.2, 1] }}
+        transition={{ duration: 7, repeat: Infinity }}
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div
-            className="inline-block text-xs font-bold tracking-widest uppercase mb-4 px-4 py-1.5 rounded-full"
-            style={{
-              backgroundColor: `${content.colors.accent}20`,
-              color: content.colors.accent,
-            }}
-          >
-            Warum uns wählen
-          </div>
-          <h2
-            className="text-4xl lg:text-5xl font-black mb-4"
-            style={{ color: content.colors.text }}
-          >
-            {isKranken ? 'Vertrauen Sie auf\nExperten' : 'Der Unterschied,\nden Sie spüren'}
-          </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: content.colors.muted }}>
-            {isKranken
-              ? 'Wir verbinden medizinische Kompetenz mit persönlichem Service.'
-              : 'Komfort, Pünktlichkeit und Verlässlichkeit — das ist unser Versprechen.'}
-          </p>
-        </motion.div>
 
-        {/* USP Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Header row */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+          >
+            <span
+              className="font-mono-display text-xs tracking-widest uppercase mb-4 block"
+              style={{ color: content.colors.accent }}
+            >
+              — Warum uns wählen
+            </span>
+            <h2
+              className="font-grotesk text-4xl lg:text-5xl font-bold leading-tight"
+              style={{ color: content.colors.text }}
+            >
+              {isKranken ? 'Medizinische\nKompetenz trifft\npersönlichen Service' : 'Der Unterschied,\nden Sie\nspüren werden'}
+            </h2>
+          </motion.div>
+
+          {/* Big accent number */}
+          <motion.div
+            className="shrink-0 text-right"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <div
+              className="font-mono-display font-bold leading-none"
+              style={{ fontSize: 'clamp(5rem, 12vw, 10rem)', color: `${content.colors.accent}15` }}
+            >
+              {isKranken ? '10+' : '24/7'}
+            </div>
+            <div className="text-sm font-semibold -mt-4" style={{ color: content.colors.muted }}>
+              {isKranken ? 'Jahre Erfahrung' : 'Für Sie da'}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* USP grid — horizontal list style */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
           {content.usps.map((usp, i) => {
             const Icon = iconMap[usp.icon] || ShieldCheck;
             return (
               <motion.div
                 key={usp.title}
-                className="flex gap-5 p-6 lg:p-8 rounded-2xl border"
+                className="flex gap-5 p-6 lg:p-7 rounded-2xl border group"
                 style={{
-                  backgroundColor: `${content.colors.bg}60`,
+                  backgroundColor: content.colors.surface,
                   borderColor: `${content.colors.text}08`,
                 }}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{
-                  borderColor: `${content.colors.accent}30`,
-                  backgroundColor: `${content.colors.surface}80`,
-                }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
+                whileHover={{ borderColor: `${content.colors.accent}35` }}
               >
-                <motion.div
-                  className="shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: `${content.colors.accent}20` }}
-                  whileHover={{ scale: 1.1, rotate: -5 }}
+                <div
+                  className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: `${content.colors.accent}15` }}
                 >
-                  <Icon size={26} style={{ color: content.colors.accent }} />
-                </motion.div>
+                  <Icon size={22} style={{ color: content.colors.accent }} />
+                </div>
                 <div>
                   <h3
-                    className="text-lg font-bold mb-2"
+                    className="font-grotesk font-bold text-base mb-1.5"
                     style={{ color: content.colors.text }}
                   >
                     {usp.title}
@@ -109,32 +112,32 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           })}
         </div>
 
-        {/* Bottom CTA banner */}
+        {/* Full-width CTA band */}
         <motion.div
-          className="mt-16 p-8 lg:p-12 rounded-3xl text-center"
+          className="relative overflow-hidden rounded-2xl p-8 lg:p-12 flex flex-col sm:flex-row items-center justify-between gap-6"
           style={{
-            background: `linear-gradient(135deg, ${content.colors.accent}20, ${content.colors.accent}08)`,
+            background: `linear-gradient(135deg, ${content.colors.accent}18 0%, ${content.colors.accent}08 100%)`,
             border: `1px solid ${content.colors.accent}30`,
           }}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
         >
-          <h3
-            className="text-2xl lg:text-3xl font-black mb-3"
-            style={{ color: content.colors.text }}
-          >
-            {isKranken ? 'Bereit für Ihre nächste Fahrt?' : 'Taxi brauchen?'}
-          </h3>
-          <p className="mb-6" style={{ color: content.colors.muted }}>
-            {isKranken
-              ? 'Rufen Sie uns an — wir kümmern uns um alles.'
-              : 'Einfach anrufen. Wir sind in wenigen Minuten bei Ihnen.'}
-          </p>
+          <div>
+            <h3
+              className="font-grotesk text-2xl lg:text-3xl font-bold mb-2"
+              style={{ color: content.colors.text }}
+            >
+              {isKranken ? 'Brauchen Sie eine Fahrt?' : 'Brauchen Sie ein Taxi?'}
+            </h3>
+            <p style={{ color: content.colors.muted }}>
+              {isKranken ? 'Wir sind Mo–Fr 8–16 Uhr erreichbar, Notfälle 24/7.' : 'Rund um die Uhr, 365 Tage im Jahr für Sie da.'}
+            </p>
+          </div>
           <motion.a
             href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-base"
+            className="shrink-0 px-8 py-4 rounded-xl font-bold font-grotesk text-base"
             style={{
               backgroundColor: content.colors.accent,
               color: isKranken ? '#fff' : '#000',
@@ -142,7 +145,7 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
           >
-            {isKranken ? 'Jetzt anrufen: 07041 816743' : 'Jetzt anrufen: 07252 94940'}
+            {isKranken ? '07041 816743' : '07252 94940'}
           </motion.a>
         </motion.div>
       </div>
