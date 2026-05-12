@@ -25,12 +25,17 @@ export default function Services({ mode, content }: ServicesProps) {
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
       style={{ backgroundColor: content.colors.bg }}
     >
-      {/* Texture + glow */}
-      <div className="absolute inset-0 noise pointer-events-none" />
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] sm:w-[600px] h-48 sm:h-64 blur-3xl opacity-10 pointer-events-none"
-        style={{ backgroundColor: content.colors.accent }}
-      />
+      {/* Top glow — only for Taxi dark mode */}
+      {!isKranken && (
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-48 blur-3xl opacity-[0.12] pointer-events-none"
+          style={{ backgroundColor: content.colors.accent }}
+        />
+      )}
+      {/* Krankenfahrten: subtle red top border */}
+      {isKranken && (
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}30` }} />
+      )}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -49,7 +54,7 @@ export default function Services({ mode, content }: ServicesProps) {
               — {isKranken ? 'Leistungen' : 'Services'}
             </span>
             <h2
-              className="font-grotesk text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-0"
+              className="font-grotesk text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight"
               style={{ color: content.colors.text }}
             >
               {isKranken ? 'Was wir für Sie tun' : 'Alles, was Sie brauchen'}
@@ -64,12 +69,12 @@ export default function Services({ mode, content }: ServicesProps) {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             {isKranken
-              ? 'Von der einfachen Arztfahrt bis zum komplexen Hospitaltransfer — wir sind für jeden Bedarf gerüstet und rechnen direkt mit Ihrer Krankenkasse ab.'
+              ? 'Von der einfachen Arztfahrt bis zum Hospitaltransfer — wir rechnen direkt mit Ihrer Krankenkasse ab.'
               : 'Von der Stadtfahrt bis zum Flughafen — komfortabel, pünktlich, zuverlässig. 24 Stunden am Tag, 365 Tage im Jahr.'}
           </motion.p>
         </div>
 
-        {/* Service cards — 1 col mobile, 2 col sm, 3 col lg */}
+        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {content.services.map((service, i) => {
             const Icon = iconMap[service.icon] || Car;
@@ -81,29 +86,28 @@ export default function Services({ mode, content }: ServicesProps) {
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.4, delay: Math.min(i * 0.06, 0.25) }}
               >
-                {/* TiltCard is disabled on touch devices via pointer coarse check — it just renders flat */}
                 <TiltCard
-                  className="group relative rounded-2xl p-5 sm:p-6 lg:p-7 overflow-hidden border cursor-default h-full transition-all duration-300"
+                  className="group relative rounded-2xl p-5 sm:p-6 lg:p-7 overflow-hidden border h-full cursor-default"
                   style={{
                     backgroundColor: content.colors.surface,
-                    borderColor: `${content.colors.text}0a`,
-                    /* gradient border via box-shadow on hover handled by motion */
+                    borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
+                    boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
                   }}
-                  intensity={8}
+                  intensity={isKranken ? 5 : 8}
                 >
-                  {/* Gradient border overlay — visible on hover via group */}
+                  {/* Gradient border on hover */}
                   <motion.div
                     className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      background: `linear-gradient(135deg, ${content.colors.accent}30, transparent 60%)`,
-                      border: `1px solid ${content.colors.accent}40`,
+                      background: `linear-gradient(135deg, ${content.colors.accent}25, transparent 60%)`,
+                      border: `1.5px solid ${content.colors.accent}35`,
                     }}
                   />
 
                   {/* Number watermark */}
                   <span
                     className="font-mono-display text-5xl font-bold absolute top-3 right-4 leading-none select-none pointer-events-none"
-                    style={{ color: `${content.colors.accent}10` }}
+                    style={{ color: `${content.colors.accent}12` }}
                   >
                     {String(i + 1).padStart(2, '0')}
                   </span>
@@ -111,22 +115,19 @@ export default function Services({ mode, content }: ServicesProps) {
                   {/* Icon */}
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 relative"
-                    style={{ backgroundColor: `${content.colors.accent}18` }}
+                    style={{ backgroundColor: `${content.colors.accent}15` }}
                   >
                     <Icon size={20} style={{ color: content.colors.accent }} />
                   </div>
 
-                  <h3
-                    className="font-grotesk text-base font-bold mb-2 relative"
-                    style={{ color: content.colors.text }}
-                  >
+                  <h3 className="font-grotesk text-base font-bold mb-2 relative" style={{ color: content.colors.text }}>
                     {service.title}
                   </h3>
                   <p className="text-sm leading-relaxed relative" style={{ color: content.colors.muted }}>
                     {service.description}
                   </p>
 
-                  {/* Bottom accent line — desktop hover */}
+                  {/* Bottom accent line */}
                   <motion.div
                     className="absolute bottom-0 left-0 h-[2px] hidden sm:block"
                     style={{ backgroundColor: content.colors.accent }}

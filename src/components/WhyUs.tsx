@@ -18,17 +18,19 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
     <section
       id="why-us"
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
-      style={{ backgroundColor: content.colors.bg }}
+      style={{ backgroundColor: content.colors.secondary }}
     >
-      {/* Glow blob — offset so it doesn't cause overflow */}
-      <div
-        className="absolute right-0 top-1/3 w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none opacity-[0.06]"
-        style={{ backgroundColor: content.colors.accent, transform: 'translateX(50%)' }}
-      />
+      {/* Taxi: glow blob — only in dark mode */}
+      {!isKranken && (
+        <div
+          className="absolute right-0 top-1/3 w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none opacity-[0.07]"
+          style={{ backgroundColor: content.colors.accent, transform: 'translateX(50%)' }}
+        />
+      )}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header — big number hidden on mobile to save space */}
+        {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-6 mb-10 sm:mb-14 lg:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 25 }}
@@ -47,12 +49,12 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
               style={{ color: content.colors.text }}
             >
               {isKranken
-                ? 'Medizinische Kompetenz\ntrifft persönlichen Service'
+                ? 'Medizinische Kompetenz\ntrifft persönlicher Service'
                 : 'Der Unterschied,\nden Sie spüren werden'}
             </h2>
           </motion.div>
 
-          {/* Decorative number — only on lg+ to avoid crowding mobile */}
+          {/* Decorative stat */}
           <motion.div
             className="hidden lg:block shrink-0 text-right"
             initial={{ opacity: 0 }}
@@ -62,7 +64,10 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           >
             <div
               className="font-mono-display font-bold leading-none"
-              style={{ fontSize: 'clamp(5rem, 10vw, 9rem)', color: `${content.colors.accent}12` }}
+              style={{
+                fontSize: 'clamp(5rem, 10vw, 9rem)',
+                color: isKranken ? `${content.colors.accent}15` : `${content.colors.accent}12`,
+              }}
             >
               {isKranken ? '10+' : '24/7'}
             </div>
@@ -72,7 +77,7 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           </motion.div>
         </div>
 
-        {/* USP grid — 1 col mobile, 2 col sm+ */}
+        {/* USP grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-10 sm:mb-14 lg:mb-16">
           {content.usps.map((usp, i) => {
             const Icon = iconMap[usp.icon] || ShieldCheck;
@@ -82,7 +87,8 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
                 className="flex gap-4 p-5 sm:p-6 lg:p-7 rounded-2xl border"
                 style={{
                   backgroundColor: content.colors.surface,
-                  borderColor: `${content.colors.text}08`,
+                  borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}08`,
+                  boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
                 }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -90,7 +96,6 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
                 transition={{ duration: 0.4, delay: Math.min(i * 0.08, 0.24) }}
                 whileHover={{ borderColor: `${content.colors.accent}35` }}
               >
-                {/* Icon — 44px touch-safe even if not interactive */}
                 <div
                   className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
                   style={{ backgroundColor: `${content.colors.accent}15` }}
@@ -113,11 +118,13 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           })}
         </div>
 
-        {/* CTA band — stacks on mobile */}
+        {/* CTA band */}
         <motion.div
           className="relative overflow-hidden rounded-2xl p-6 sm:p-8 lg:p-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-6"
           style={{
-            background: `linear-gradient(135deg, ${content.colors.accent}18 0%, ${content.colors.accent}07 100%)`,
+            background: isKranken
+              ? `linear-gradient(135deg, ${content.colors.accent}12 0%, rgba(183,0,9,0.06) 100%)`
+              : `linear-gradient(135deg, ${content.colors.accent}18 0%, ${content.colors.accent}07 100%)`,
             border: `1px solid ${content.colors.accent}30`,
           }}
           initial={{ opacity: 0, y: 20 }}
@@ -134,17 +141,25 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
             </h3>
             <p className="text-sm sm:text-base" style={{ color: content.colors.muted }}>
               {isKranken
-                ? 'Wir sind Mo–Fr 8–16 Uhr erreichbar, Notfälle 24/7.'
+                ? 'Mo–Fr 8–16 Uhr erreichbar — Notfälle 24/7.'
                 : 'Rund um die Uhr, 365 Tage im Jahr für Sie da.'}
             </p>
+            {isKranken && (
+              <div className="flex items-center gap-2 mt-2">
+                <span
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold"
+                  style={{ backgroundColor: `${content.colors.accent2}15`, color: content.colors.accent2, border: `1px solid ${content.colors.accent2}30` }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                  Notfälle 24/7
+                </span>
+              </div>
+            )}
           </div>
           <motion.a
             href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
             className="w-full sm:w-auto shrink-0 flex items-center justify-center px-7 py-4 rounded-xl font-bold font-grotesk text-base min-h-[52px]"
-            style={{
-              backgroundColor: content.colors.accent,
-              color: isKranken ? '#fff' : '#000',
-            }}
+            style={{ backgroundColor: content.colors.accent, color: isKranken ? '#fff' : '#000' }}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
           >

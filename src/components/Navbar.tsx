@@ -23,7 +23,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
   const activeSection = useActiveSection();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -34,19 +34,37 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // Adaptive scrolled colors: white navbar for Krankenfahrten, dark for Taxi
+  const navBg = scrolled
+    ? (isKranken ? 'rgba(255,255,255,0.97)' : 'rgba(6,5,0,0.94)')
+    : 'rgba(0,0,0,0.22)';
+  const navBorder = scrolled
+    ? (isKranken ? '0 1px 0 rgba(0,0,0,0.08), 0 4px 20px rgba(0,0,0,0.06)' : '0 1px 0 rgba(255,255,255,0.06), 0 4px 20px rgba(0,0,0,0.4)')
+    : 'none';
+  const navBlur = scrolled ? 'blur(24px) saturate(180%)' : 'blur(10px) saturate(130%)';
+  const linkColor = (scrolled && isKranken) ? 'rgba(0,0,0,0.5)' : 'rgba(255,255,255,0.5)';
+  const linkHoverColor = (scrolled && isKranken) ? content.colors.text : '#ffffff';
+  const logoTextColor = (scrolled && isKranken) ? content.colors.text : '#ffffff';
+
   return (
     <motion.header
       className="fixed top-0 left-0 right-0 z-50"
       animate={{
-        backgroundColor: scrolled ? 'rgba(0,0,0,0.88)' : 'rgba(0,0,0,0.28)',
-        backdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(130%)',
-        WebkitBackdropFilter: scrolled ? 'blur(24px) saturate(180%)' : 'blur(12px) saturate(130%)',
-        boxShadow: scrolled ? `0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.35)` : 'none',
+        backgroundColor: navBg,
+        boxShadow: navBorder,
+        backdropFilter: navBlur,
+        WebkitBackdropFilter: navBlur,
       }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.28 }}
     >
+      {/* Red brand stripe — only visible on Krankenfahrten not-scrolled */}
+      <div
+        className="h-[3px] transition-all duration-300"
+        style={{ backgroundColor: isKranken ? '#b70009' : 'transparent', opacity: scrolled ? 0 : 1 }}
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-3">
+        <div className="flex items-center justify-between h-[60px] gap-3">
 
           {/* Logo */}
           <motion.button
@@ -70,22 +88,22 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
                 )}
               </AnimatePresence>
             </div>
-            <span className="font-grotesk font-bold text-white text-sm hidden sm:block leading-tight">
+            <span className="font-grotesk font-bold text-sm hidden sm:block leading-tight" style={{ color: logoTextColor }}>
               Irmak Transport
             </span>
           </motion.button>
 
-          {/* Mode toggle — always visible, center */}
+          {/* Mode toggle */}
           <div
             className="flex items-stretch rounded-xl overflow-hidden border flex-1 sm:flex-none max-w-[220px] sm:max-w-none"
-            style={{ borderColor: 'rgba(255,255,255,0.12)' }}
+            style={{ borderColor: (scrolled && isKranken) ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)' }}
           >
             <motion.button
               onClick={() => onModeChange('krankenfahrten')}
-              className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk transition-colors duration-200 outline-none flex-1 sm:flex-none min-h-[44px]"
+              className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk outline-none flex-1 sm:flex-none min-h-[44px]"
               style={{
-                backgroundColor: isKranken ? '#009418' : 'rgba(0,0,0,0.4)',
-                color: isKranken ? '#fff' : 'rgba(255,255,255,0.45)',
+                backgroundColor: isKranken ? '#009418' : ((scrolled && isKranken) ? 'rgba(0,0,0,0.04)' : 'rgba(0,0,0,0.35)'),
+                color: isKranken ? '#fff' : (scrolled && !isKranken ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.45)'),
               }}
               whileTap={{ scale: 0.96 }}
             >
@@ -94,14 +112,14 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
               <span className="hidden sm:inline">Krankenfahrten</span>
             </motion.button>
 
-            <div className="w-px shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.12)' }} />
+            <div className="w-px shrink-0" style={{ backgroundColor: (scrolled && isKranken) ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)' }} />
 
             <motion.button
               onClick={() => onModeChange('taxi')}
-              className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk transition-colors duration-200 outline-none flex-1 sm:flex-none min-h-[44px]"
+              className="relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 text-xs font-semibold font-grotesk outline-none flex-1 sm:flex-none min-h-[44px]"
               style={{
-                backgroundColor: !isKranken ? '#e9c704' : 'rgba(0,0,0,0.4)',
-                color: !isKranken ? '#000' : 'rgba(255,255,255,0.45)',
+                backgroundColor: !isKranken ? '#e9c704' : ((scrolled && isKranken) ? 'rgba(0,0,0,0.04)' : 'rgba(0,0,0,0.35)'),
+                color: !isKranken ? '#000' : (scrolled && isKranken ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.45)'),
               }}
               whileTap={{ scale: 0.96 }}
             >
@@ -110,7 +128,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             </motion.button>
           </div>
 
-          {/* Desktop nav links */}
+          {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-6 shrink-0">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
@@ -118,17 +136,12 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="relative text-sm font-medium transition-colors duration-200 py-1"
-                  style={{ color: isActive ? content.colors.accent : 'rgba(255,255,255,0.5)' }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.85)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = isActive ? content.colors.accent : 'rgba(255,255,255,0.5)';
-                  }}
+                  className="relative text-sm font-medium py-1 transition-colors duration-200"
+                  style={{ color: isActive ? content.colors.accent : linkColor }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = linkHoverColor; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = isActive ? content.colors.accent : linkColor; }}
                 >
                   {link.label}
-                  {/* Active underline dot */}
                   <AnimatePresence>
                     {isActive && (
                       <motion.span
@@ -146,11 +159,8 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             })}
             <motion.a
               href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold font-grotesk min-h-[44px] relative overflow-hidden"
-              style={{
-                backgroundColor: content.colors.accent,
-                color: isKranken ? '#fff' : '#000',
-              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold font-grotesk min-h-[44px]"
+              style={{ backgroundColor: content.colors.accent, color: isKranken ? '#fff' : '#000' }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -159,10 +169,13 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             </motion.a>
           </div>
 
-          {/* Mobile hamburger */}
+          {/* Hamburger */}
           <button
-            className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl shrink-0 text-white/70"
-            style={{ backgroundColor: 'rgba(255,255,255,0.06)' }}
+            className="lg:hidden flex items-center justify-center w-11 h-11 rounded-xl shrink-0"
+            style={{
+              backgroundColor: (scrolled && isKranken) ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)',
+              color: (scrolled && isKranken) ? content.colors.text : 'rgba(255,255,255,0.8)',
+            }}
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? 'Menü schließen' : 'Menü öffnen'}
           >
@@ -171,7 +184,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile dropdown */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -180,7 +193,10 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22 }}
             className="lg:hidden overflow-hidden border-t"
-            style={{ backgroundColor: 'rgba(0,0,0,0.96)', borderColor: 'rgba(255,255,255,0.08)' }}
+            style={{
+              backgroundColor: isKranken ? 'rgba(255,255,255,0.98)' : 'rgba(6,5,0,0.98)',
+              borderColor: isKranken ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
+            }}
           >
             <div className="px-4 py-4 flex flex-col gap-1">
               {navLinks.map((link) => {
@@ -191,7 +207,7 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
                     href={link.href}
                     className="flex items-center min-h-[48px] px-3 text-sm font-medium rounded-xl transition-colors"
                     style={{
-                      color: isActive ? content.colors.accent : 'rgba(255,255,255,0.65)',
+                      color: isActive ? content.colors.accent : (isKranken ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.65)'),
                       backgroundColor: isActive ? `${content.colors.accent}10` : 'transparent',
                     }}
                     onClick={() => setMenuOpen(false)}

@@ -1,38 +1,35 @@
 import type { ModeContent } from '../types';
 
-// ── Real brand colors extracted via browser DevTools ────────────────────────
-// krankenfahrten-irmak.de: h1/accent = #009418 (rgb 0,148,24), bg = #d9ffdd
-// taxi-bretten.de:         h2/links  = #e9c704 (rgb 233,199,4), hero bg-image available
+// Real brand colors extracted via browser DevTools:
+// krankenfahrten-irmak.de: green #009418 (text/links), red #b70009 (dividers), dark-red #830000 (hero bg)
+// taxi-bretten.de: yellow #e9c704 (links/headers)
 
 export const IMAGES = {
-  krankenHero: 'https://u.jimcdn.com/cms/o/sd5b20d1df9ec4b7e/emotion/crop/header.jpg?t=1459890516',
-  krankenContent: 'https://image.jimcdn.com/app/cms/image/transf/dimension=200x1024:format=jpg/path/sd5b20d1df9ec4b7e/image/i19faa002ecc1d03a/version/1705244932/image.jpg',
-  taxiHero: 'https://assets.coco-online.de/39021717533041-9oAk9PZS/header-taxi-bretten_full_w.jpg',
-  taxiLogo: 'https://assets.coco-online.de/39021717533044-K1tN6Yza/taxi-logo.jpg',
-  taxiBretten: 'https://assets.coco-online.de/39021717533037-mqHqAEYZ/Visitenkarte_Bretten.jpg',
-  taxiOberderdingen: 'https://assets.coco-online.de/39021717533037-svJ6udP0/Visitenkarte_Oberderdingen.jpg',
-  taxiVaihingen: 'https://assets.coco-online.de/39021717533037-RiQjwb3V/Visitenkarte_Vaihingen.jpg',
+  krankenHero: '/images/hero-kranken.jpg',
+  taxiHero: '/images/hero-taxi.jpg',
+  taxiBretten: '/images/location-bretten.jpg',
+  taxiOberderdingen: '/images/location-oberderdingen.jpg',
+  taxiVaihingen: '/images/location-vaihingen.jpg',
 };
 
 export const krankenfahrtenContent: ModeContent = {
-  tagline: 'Ihr zuverlässiger Partner für medizinische Fahrten',
+  tagline: 'Direkt. Fürsorglich. Pünktlich.',
   headline: 'Krankenfahrten\nmit Herz',
-  subheadline:
-    'Professioneller Patientenbeförderungsdienst im Enzkreis und Kraichgau — sitzend, liegend, oder im Rollstuhl. Qualifiziertes Fachpersonal, direkte Krankenkassenabrechnung.',
+  subheadline: 'Sicher ans Ziel — sitzend, liegend oder im Rollstuhl. Alle Kassen, direkte Abrechnung.',
   ctaPrimary: 'Jetzt anrufen',
-  ctaSecondary: 'Leistungen entdecken',
+  ctaSecondary: 'Unsere Leistungen',
   heroImage: IMAGES.krankenHero,
 
   stats: [
     { value: '15+', label: 'Jahre Erfahrung' },
-    { value: '24/7', label: 'Erreichbar' },
-    { value: '100%', label: 'Krankenkassen' },
+    { value: '100%', label: 'GKV direkt' },
+    { value: '24/7', label: 'Notfälle' },
     { value: '2', label: 'Standorte' },
   ],
 
   testimonials: [
     {
-      text: 'Pünktlich, freundlich und professionell. Das Team von Krankenfahrten Irmak begleitet mich seit Jahren zu meinen Dialyseterminen.',
+      text: 'Pünktlich, freundlich und professionell. Das Team begleitet mich seit Jahren zu meinen Dialyseterminen.',
       author: 'Heinz M., Patient',
       stars: 5,
     },
@@ -52,12 +49,12 @@ export const krankenfahrtenContent: ModeContent = {
     {
       icon: 'Stethoscope',
       title: 'Krankentransport',
-      description: 'Komfortabler Transport zu Arzt, Krankenhaus oder Reha — durch ausgebildetes Fachpersonal begleitet.',
+      description: 'Transport zu Arzt, Krankenhaus oder Reha — durch ausgebildetes Fachpersonal begleitet.',
     },
     {
       icon: 'Accessibility',
       title: 'Rollstuhltaxi',
-      description: 'Barrierefreie Fahrzeuge für Rollstuhlfahrer. Abholung direkt an der Tür, Begleitung bis ans Ziel.',
+      description: 'Barrierefreie Fahrzeuge für Rollstuhlfahrer. Abholung an der Tür, Begleitung bis ans Ziel.',
     },
     {
       icon: 'Zap',
@@ -67,17 +64,17 @@ export const krankenfahrtenContent: ModeContent = {
     {
       icon: 'Heart',
       title: 'Bestrahlungsfahrten',
-      description: 'Einfühlsame Begleitung zu Bestrahlung und Chemotherapie. Ihre Sicherheit hat oberste Priorität.',
+      description: 'Einfühlsame Begleitung zu Bestrahlung und Chemotherapie. Ihre Sicherheit hat Priorität.',
     },
     {
       icon: 'Building2',
       title: 'Hospitaltransfer',
-      description: 'Kosteneffiziente Alternative zum Krankenwagen — Abholung direkt aus dem Krankenzimmer.',
+      description: 'Günstige Alternative zum Krankenwagen — Abholung direkt aus dem Krankenzimmer.',
     },
     {
       icon: 'MapPin',
       title: 'Kurfahrten & Reha',
-      description: 'Bequeme Langstreckenfahrten zu Kurorten und Rehabilitationszentren bundesweit.',
+      description: 'Langstreckenfahrten zu Kurorten und Rehabilitationszentren bundesweit.',
     },
   ],
 
@@ -115,22 +112,22 @@ export const krankenfahrtenContent: ModeContent = {
   },
 
   colors: {
-    primary: '#0a1a0d',
-    secondary: '#0f2214',
+    primary: '#f8faf8',
+    secondary: '#f2f2f2',
     accent: '#009418',
+    accent2: '#b70009',
     accentLight: '#00b81e',
-    bg: '#060f08',
-    surface: '#0f1f12',
-    text: '#e8f5ea',
-    muted: '#6b9b72',
+    bg: '#ffffff',
+    surface: '#eef7ee',
+    text: '#1a1a1a',
+    muted: '#5c5c5c',
   },
 };
 
 export const taxiContent: ModeContent = {
-  tagline: 'Rund um die Uhr für Sie da!',
+  tagline: '24/7 · Bretten · Oberderdingen · Vaihingen/Enz',
   headline: 'Taxi & Transfer\nim Kraichgau',
-  subheadline:
-    'Maxi Car & Enz Taxi GmbH — Ihr zuverlässiger Fahrservice in Bretten, Oberderdingen und Vaihingen/Enz. 24 Stunden, 365 Tage.',
+  subheadline: 'Immer da, wenn Sie uns brauchen. Einfach anrufen — in Minuten bei Ihnen.',
   ctaPrimary: 'Jetzt Taxi rufen',
   ctaSecondary: 'Alle Services',
   heroImage: IMAGES.taxiHero,
@@ -139,7 +136,7 @@ export const taxiContent: ModeContent = {
     { value: '24/7', label: '365 Tage' },
     { value: '3', label: 'Standorte' },
     { value: '2016', label: 'Gegründet' },
-    { value: '∞', label: 'Verfügbar' },
+    { value: '10 Min', label: 'Ø Wartezeit' },
   ],
 
   testimonials: [
@@ -228,13 +225,14 @@ export const taxiContent: ModeContent = {
   },
 
   colors: {
-    primary: '#0d0c00',
-    secondary: '#151300',
+    primary: '#0a0900',
+    secondary: '#100f00',
     accent: '#e9c704',
+    accent2: '#c4a800',
     accentLight: '#f5d800',
-    bg: '#080700',
-    surface: '#121000',
-    text: '#f5f0d0',
-    muted: '#8a7e40',
+    bg: '#060500',
+    surface: '#111000',
+    text: '#ffffff',
+    muted: '#9a8e48',
   },
 };

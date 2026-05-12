@@ -46,6 +46,7 @@ export interface ModeContent {
     primary: string;
     secondary: string;
     accent: string;
+    accent2: string;
     accentLight: string;
     bg: string;
     surface: string;

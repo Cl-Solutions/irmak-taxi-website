@@ -16,15 +16,17 @@ export default function Footer({ mode, content }: FooterProps) {
       className="border-t"
       style={{
         backgroundColor: content.colors.primary,
-        borderColor: `${content.colors.text}08`,
+        borderColor: isKranken ? 'rgba(0,0,0,0.08)' : `${content.colors.text}08`,
       }}
     >
+      {/* Red top stripe for Krankenfahrten */}
+      {isKranken && <div className="h-1" style={{ backgroundColor: '#b70009' }} />}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
 
-        {/* Grid: full-width 1-col on mobile, 2-col sm, 4-col lg */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-8 sm:mb-10">
 
-          {/* Brand — spans 2 cols on lg */}
+          {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div
@@ -53,7 +55,7 @@ export default function Footer({ mode, content }: FooterProps) {
             </p>
           </div>
 
-          {/* Leistungen */}
+          {/* Services */}
           <div>
             <h4
               className="font-grotesk font-bold text-xs tracking-widest uppercase mb-4"
@@ -78,7 +80,7 @@ export default function Footer({ mode, content }: FooterProps) {
             </ul>
           </div>
 
-          {/* Kontakt */}
+          {/* Contact */}
           <div>
             <h4
               className="font-grotesk font-bold text-xs tracking-widest uppercase mb-4"
@@ -126,7 +128,7 @@ export default function Footer({ mode, content }: FooterProps) {
         {/* Bottom bar */}
         <div
           className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-6 border-t"
-          style={{ borderColor: `${content.colors.text}08` }}
+          style={{ borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}08` }}
         >
           <p className="font-mono-display text-xs" style={{ color: `${content.colors.muted}70` }}>
             © {year} Irmak Transport GmbH
@@ -148,21 +150,20 @@ export default function Footer({ mode, content }: FooterProps) {
         </div>
       </div>
 
-      {/* Floating call button — mobile only, 56px = touch-safe */}
-      {/* Positioned above the fold edge so it doesn't overlap important content */}
+      {/* Floating call FAB — mobile only */}
       <motion.a
         href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
         className="fixed bottom-5 right-4 sm:hidden w-14 h-14 rounded-full flex items-center justify-center z-50"
         style={{
           backgroundColor: content.colors.accent,
-          boxShadow: `0 4px 24px ${content.colors.accent}65`,
+          boxShadow: `0 4px 24px ${content.colors.accent}60`,
         }}
         whileTap={{ scale: 0.9 }}
         animate={{ scale: [1, 1.05, 1] }}
         transition={{ duration: 2.5, repeat: Infinity }}
         aria-label="Anrufen"
       >
-        <Phone size={22} color={isKranken ? '#fff' : '#000'} />
+        <Phone size={22} color="#fff" />
       </motion.a>
     </footer>
   );

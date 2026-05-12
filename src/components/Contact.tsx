@@ -29,6 +29,10 @@ export default function Contact({ mode, content }: ContactProps) {
       className="py-16 sm:py-24 lg:py-28 relative"
       style={{ backgroundColor: content.colors.secondary }}
     >
+      {isKranken && (
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}20` }} />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -55,39 +59,39 @@ export default function Contact({ mode, content }: ContactProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
 
-          {/* Left — call + info */}
+          {/* Left — hours + phones + WhatsApp */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            {/* ── Prominent hours banner ── */}
+            {/* Hours banner */}
             <div
               className="flex items-center gap-3 p-4 rounded-2xl mb-5 sm:mb-6 border"
-              style={{
-                backgroundColor: `${content.colors.accent}12`,
-                borderColor: `${content.colors.accent}30`,
-              }}
+              style={isKranken
+                ? { backgroundColor: `${content.colors.accent2}08`, borderColor: `${content.colors.accent2}25` }
+                : { backgroundColor: `${content.colors.accent}10`, borderColor: `${content.colors.accent}28` }
+              }
             >
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: `${content.colors.accent}20` }}
+                style={{ backgroundColor: isKranken ? `${content.colors.accent2}15` : `${content.colors.accent}18` }}
               >
-                <Clock size={18} style={{ color: content.colors.accent }} />
+                <Clock size={18} style={{ color: isKranken ? content.colors.accent2 : content.colors.accent }} />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <div className="text-xs font-bold uppercase tracking-wide mb-0.5" style={{ color: content.colors.muted }}>
                   Erreichbarkeit
                 </div>
-                <div className="font-grotesk font-bold text-base" style={{ color: content.colors.text }}>
+                <div className="font-grotesk font-bold text-sm sm:text-base" style={{ color: content.colors.text }}>
                   {content.contact.hours}
                 </div>
               </div>
               <motion.div
-                className="ml-auto w-2.5 h-2.5 rounded-full shrink-0"
+                className="w-2.5 h-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: '#22c55e' }}
-                animate={{ opacity: [1, 0.25, 1], scale: [1, 1.2, 1] }}
+                animate={{ opacity: [1, 0.3, 1], scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
             </div>
@@ -107,25 +111,30 @@ export default function Contact({ mode, content }: ContactProps) {
                   href={`tel:${phone.number.replace(/\s/g, '')}`}
                   className="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border min-h-[72px] relative overflow-hidden"
                   style={{
-                    backgroundColor: i === 0 ? `${content.colors.accent}12` : content.colors.surface,
-                    borderColor: i === 0 ? `${content.colors.accent}35` : `${content.colors.text}08`,
+                    backgroundColor: i === 0
+                      ? (isKranken ? `${content.colors.accent}08` : `${content.colors.accent}10`)
+                      : content.colors.surface,
+                    borderColor: i === 0
+                      ? (isKranken ? `${content.colors.accent}25` : `${content.colors.accent}30`)
+                      : (isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}08`),
+                    boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
                   }}
-                  whileHover={{ borderColor: `${content.colors.accent}60` }}
+                  whileHover={{ borderColor: `${content.colors.accent}55` }}
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.15 }}
                 >
-                  {/* Pulsing ring for primary number */}
+                  {/* Pulsing ring on primary */}
                   {i === 0 && (
                     <motion.div
                       className="absolute inset-0 rounded-2xl pointer-events-none"
-                      style={{ border: `2px solid ${content.colors.accent}` }}
-                      animate={{ opacity: [0.25, 0, 0.25], scale: [1, 1.02, 1] }}
-                      transition={{ duration: 2.5, repeat: Infinity }}
+                      style={{ border: `1.5px solid ${content.colors.accent}` }}
+                      animate={{ opacity: [0.2, 0, 0.2], scale: [1, 1.015, 1] }}
+                      transition={{ duration: 2.8, repeat: Infinity }}
                     />
                   )}
                   <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 relative"
-                    style={{ backgroundColor: `${content.colors.accent}20` }}
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `${content.colors.accent}18` }}
                   >
                     <Phone size={18} style={{ color: content.colors.accent }} />
                   </div>
@@ -149,7 +158,7 @@ export default function Contact({ mode, content }: ContactProps) {
               ))}
             </div>
 
-            {/* WhatsApp CTA */}
+            {/* WhatsApp */}
             <motion.a
               href={`https://wa.me/${waNumber}`}
               target="_blank"
@@ -158,7 +167,7 @@ export default function Contact({ mode, content }: ContactProps) {
               style={{
                 backgroundColor: 'rgba(37,211,102,0.08)',
                 borderColor: 'rgba(37,211,102,0.25)',
-                color: '#25d366',
+                color: isKranken ? '#1a8a3a' : '#25d366',
               }}
               whileHover={{ backgroundColor: 'rgba(37,211,102,0.14)', scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
@@ -168,7 +177,7 @@ export default function Contact({ mode, content }: ContactProps) {
             </motion.a>
 
             {/* Info rows */}
-            <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 gap-2.5">
               {[
                 { Icon: Mail, label: 'E-Mail', value: content.contact.email },
                 { Icon: MapPin, label: 'Adresse', value: content.contact.address },
@@ -176,7 +185,10 @@ export default function Contact({ mode, content }: ContactProps) {
                 <div
                   key={label}
                   className="flex items-start gap-3 p-3.5 sm:p-4 rounded-xl"
-                  style={{ backgroundColor: `${content.colors.surface}70` }}
+                  style={{
+                    backgroundColor: isKranken ? 'rgba(0,0,0,0.03)' : `${content.colors.surface}70`,
+                    border: isKranken ? '1px solid rgba(0,0,0,0.06)' : 'none',
+                  }}
                 >
                   <div
                     className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
@@ -208,7 +220,8 @@ export default function Contact({ mode, content }: ContactProps) {
               className="p-5 sm:p-7 lg:p-8 rounded-2xl border"
               style={{
                 backgroundColor: content.colors.surface,
-                borderColor: `${content.colors.text}0a`,
+                borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
+                boxShadow: isKranken ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
               }}
             >
               <h3
@@ -244,11 +257,11 @@ export default function Contact({ mode, content }: ContactProps) {
                       className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk transition-all min-h-[48px]"
                       style={{
                         backgroundColor: content.colors.bg,
-                        borderColor: `${content.colors.text}12`,
+                        borderColor: isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`,
                         color: content.colors.text,
                       }}
                       onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
-                      onBlur={(e) => (e.target.style.borderColor = `${content.colors.text}12`)}
+                      onBlur={(e) => (e.target.style.borderColor = isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`)}
                     />
                   </div>
                 ))}
@@ -263,46 +276,34 @@ export default function Contact({ mode, content }: ContactProps) {
                   </label>
                   <textarea
                     id="message"
-                    placeholder={
-                      isKranken
-                        ? 'Art der Fahrt, Datum, Anforderungen...'
-                        : 'Ziel, Datum, Uhrzeit, Personen...'
-                    }
+                    placeholder={isKranken ? 'Art der Fahrt, Datum, Anforderungen...' : 'Ziel, Datum, Uhrzeit, Personen...'}
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk resize-none transition-all"
                     style={{
                       backgroundColor: content.colors.bg,
-                      borderColor: `${content.colors.text}12`,
+                      borderColor: isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`,
                       color: content.colors.text,
                     }}
                     onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
-                    onBlur={(e) => (e.target.style.borderColor = `${content.colors.text}12`)}
+                    onBlur={(e) => (e.target.style.borderColor = isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`)}
                   />
                 </div>
 
                 <motion.button
                   type="submit"
                   className="flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold font-grotesk text-sm mt-1 min-h-[52px]"
-                  style={{
-                    backgroundColor: content.colors.accent,
-                    color: isKranken ? '#fff' : '#000',
-                  }}
+                  style={{ backgroundColor: content.colors.accent, color: '#fff' }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   {sent ? '✓ Anfrage gesendet!' : <><Send size={15} /> Rückruf anfordern</>}
                 </motion.button>
 
-                {/* Quick call alternative */}
                 <p className="text-center text-xs" style={{ color: content.colors.muted }}>
-                  Oder direkt anrufen:{' '}
-                  <a
-                    href={`tel:${phoneRaw}`}
-                    className="font-bold"
-                    style={{ color: content.colors.accent }}
-                  >
+                  Oder direkt:{' '}
+                  <a href={`tel:${phoneRaw}`} className="font-bold" style={{ color: content.colors.accent }}>
                     {content.contact.phones[0].number}
                   </a>
                 </p>

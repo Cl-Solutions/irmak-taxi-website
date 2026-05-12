@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
+import { Star, Quote, Phone } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
 import { IMAGES } from '../data/content';
 import AnimatedCounter from './ui/AnimatedCounter';
@@ -11,7 +11,7 @@ interface TrustProps {
 
 const taxiStats = [
   { value: 500, suffix: '+', label: 'Fahrten / Monat' },
-  { value: 24, suffix: '/7', label: 'Erreichbar' },
+  { value: 24, suffix: '/7', label: 'Erreichbar', isEmergency: false },
   { value: 8, suffix: '+', label: 'Jahre Erfahrung' },
   { value: 3, suffix: '', label: 'Standorte' },
 ];
@@ -19,7 +19,7 @@ const taxiStats = [
 const krankenStats = [
   { value: 10, suffix: '+', label: 'Jahre Erfahrung' },
   { value: 100, suffix: '%', label: 'GKV-Abrechnung' },
-  { value: 24, suffix: '/7', label: 'Notfall-Bereitschaft' },
+  { value: 24, suffix: '/7', label: 'Notfall-Bereitschaft', isEmergency: true },
   { value: 2, suffix: '', label: 'Regionen' },
 ];
 
@@ -30,21 +30,22 @@ export default function Trust({ mode, content }: TrustProps) {
   return (
     <section
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
-      style={{ backgroundColor: content.colors.secondary }}
+      style={{ backgroundColor: isKranken ? content.colors.bg : content.colors.secondary }}
     >
-      {/* Background image hint */}
-      <div className="absolute inset-0 pointer-events-none">
-        <img
-          src={isKranken ? IMAGES.krankenHero : IMAGES.taxiHero}
-          alt=""
-          className="w-full h-full object-cover opacity-[0.04]"
-          crossOrigin="anonymous"
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: `linear-gradient(135deg, ${content.colors.secondary} 35%, transparent 100%)` }}
-        />
-      </div>
+      {/* Subtle bg photo hint for Taxi */}
+      {!isKranken && (
+        <div className="absolute inset-0 pointer-events-none">
+          <img
+            src={IMAGES.taxiHero}
+            alt=""
+            className="w-full h-full object-cover opacity-[0.03]"
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: `linear-gradient(135deg, ${content.colors.secondary} 30%, transparent 100%)` }}
+          />
+        </div>
+      )}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -70,38 +71,34 @@ export default function Trust({ mode, content }: TrustProps) {
           </h2>
         </motion.div>
 
-        {/* ── Animated stat counters ── */}
+        {/* Animated counters */}
         <motion.div
           className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-14"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.5 }}
         >
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              className="relative p-4 sm:p-6 rounded-2xl border overflow-hidden text-center"
+              className="relative p-4 sm:p-6 rounded-2xl border text-center overflow-hidden"
               style={{
-                backgroundColor: `${content.colors.surface}80`,
-                borderColor: `${content.colors.text}0a`,
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
+                backgroundColor: content.colors.surface,
+                borderColor: isKranken
+                  ? (stat.isEmergency ? `${content.colors.accent2}25` : 'rgba(0,0,0,0.07)')
+                  : `${content.colors.text}0a`,
+                boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
               }}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.92 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
-              whileHover={{ borderColor: `${content.colors.accent}35` }}
+              whileHover={{ borderColor: isKranken && stat.isEmergency ? `${content.colors.accent2}50` : `${content.colors.accent}35` }}
             >
-              {/* glow on hover */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                style={{ background: `radial-gradient(ellipse at center, ${content.colors.accent}10, transparent 70%)` }}
-              />
               <div
                 className="font-grotesk text-2xl sm:text-3xl font-bold mb-1 leading-none"
-                style={{ color: content.colors.accent }}
+                style={{ color: (isKranken && stat.isEmergency) ? content.colors.accent2 : content.colors.accent }}
               >
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} duration={1.6} />
               </div>
@@ -119,10 +116,9 @@ export default function Trust({ mode, content }: TrustProps) {
               key={i}
               className="relative p-5 sm:p-7 rounded-2xl border"
               style={{
-                backgroundColor: `${content.colors.surface}cc`,
-                borderColor: `${content.colors.text}0a`,
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
+                backgroundColor: content.colors.surface,
+                borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
+                boxShadow: isKranken ? '0 1px 6px rgba(0,0,0,0.05)' : 'none',
               }}
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -130,21 +126,15 @@ export default function Trust({ mode, content }: TrustProps) {
               transition={{ duration: 0.4, delay: Math.min(i * 0.1, 0.2) }}
               whileHover={{ borderColor: `${content.colors.accent}30` }}
             >
-              <Quote size={28} className="mb-3 opacity-25" style={{ color: content.colors.accent }} />
-
+              <Quote size={28} className="mb-3 opacity-20" style={{ color: content.colors.accent }} />
               <div className="flex gap-1 mb-3">
                 {Array.from({ length: t.stars }).map((_, j) => (
                   <Star key={j} size={12} fill={content.colors.accent} style={{ color: content.colors.accent }} />
                 ))}
               </div>
-
-              <p
-                className="text-sm leading-relaxed mb-5 italic"
-                style={{ color: `${content.colors.text}cc` }}
-              >
+              <p className="text-sm leading-relaxed mb-5 italic" style={{ color: content.colors.muted }}>
                 „{t.text}"
               </p>
-
               <div className="flex items-center gap-3">
                 <div
                   className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold font-grotesk shrink-0"
@@ -160,40 +150,58 @@ export default function Trust({ mode, content }: TrustProps) {
           ))}
         </div>
 
-        {/* Taxi: Location cards */}
+        {/* Taxi: Location cards with real photos — large, prominent, clickable */}
         {!isKranken && (
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.15 }}
           >
             {[
-              { img: IMAGES.taxiBretten, label: 'Bretten', phone: '07252 94940' },
-              { img: IMAGES.taxiOberderdingen, label: 'Oberderdingen', phone: '07045 201035' },
-              { img: IMAGES.taxiVaihingen, label: 'Vaihingen/Enz', phone: '07042 1020010' },
+              { img: IMAGES.taxiBretten, label: 'Bretten', phone: '07252 94940', raw: '0725294940' },
+              { img: IMAGES.taxiOberderdingen, label: 'Oberderdingen', phone: '07045 201035', raw: '07045201035' },
+              { img: IMAGES.taxiVaihingen, label: 'Vaihingen/Enz', phone: '07042 1020010', raw: '070421020010' },
             ].map((loc) => (
               <motion.a
                 key={loc.label}
-                href={`tel:${loc.phone.replace(/\s/g, '')}`}
-                className="group relative overflow-hidden rounded-2xl border"
+                href={`tel:${loc.raw}`}
+                className="group relative overflow-hidden rounded-2xl border flex flex-col"
                 style={{ borderColor: `${content.colors.text}0a` }}
-                whileHover={{ borderColor: `${content.colors.accent}50`, y: -3 }}
+                whileHover={{ borderColor: `${content.colors.accent}55`, y: -4 }}
+                transition={{ duration: 0.2 }}
               >
-                <img
-                  src={loc.img}
-                  alt={loc.label}
-                  className="w-full h-36 sm:h-40 object-cover transition-transform duration-500 group-hover:scale-105"
-                  crossOrigin="anonymous"
-                />
-                <div className="p-4" style={{ backgroundColor: content.colors.surface }}>
-                  <p className="font-grotesk font-bold text-sm mb-0.5" style={{ color: content.colors.text }}>
-                    {loc.label}
-                  </p>
-                  <p className="font-mono-display text-xs" style={{ color: content.colors.accent }}>
-                    {loc.phone}
-                  </p>
+                <div className="relative overflow-hidden">
+                  <img
+                    src={loc.img}
+                    alt={loc.label}
+                    className="w-full h-44 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Yellow overlay hint on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: `linear-gradient(to top, ${content.colors.accent}40, transparent 60%)` }}
+                  />
+                </div>
+                <div
+                  className="p-4 flex items-center justify-between"
+                  style={{ backgroundColor: content.colors.surface }}
+                >
+                  <div>
+                    <p className="font-grotesk font-bold text-sm mb-0.5" style={{ color: content.colors.text }}>
+                      {loc.label}
+                    </p>
+                    <p className="font-mono-display text-sm font-bold" style={{ color: content.colors.accent }}>
+                      {loc.phone}
+                    </p>
+                  </div>
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `${content.colors.accent}15` }}
+                  >
+                    <Phone size={16} style={{ color: content.colors.accent }} />
+                  </div>
                 </div>
               </motion.a>
             ))}
@@ -210,26 +218,28 @@ export default function Trust({ mode, content }: TrustProps) {
             transition={{ delay: 0.2 }}
           >
             {[
-              { label: 'Krankenkassen', value: 'Alle GKV', sub: 'Direktabrechnung' },
-              { label: 'Ausbildung', value: 'Medizinisch', sub: 'Pflegefachkräfte' },
-              { label: 'Reaktionszeit', value: 'Schnell', sub: '24/7 Notfälle' },
-              { label: 'Erfahrung', value: 'Seit 2010', sub: 'Im Enzkreis' },
+              { label: 'Krankenkassen', value: 'Alle GKV', sub: 'Direktabrechnung', isRed: false },
+              { label: 'Ausbildung', value: 'Medizinisch', sub: 'Fachpersonal', isRed: false },
+              { label: 'Reaktionszeit', value: 'Schnell', sub: '24/7 Notfälle', isRed: true },
+              { label: 'Erfahrung', value: 'Seit 2010', sub: 'Im Enzkreis', isRed: false },
             ].map((badge, i) => (
               <motion.div
                 key={badge.label}
                 className="p-4 sm:p-5 rounded-2xl border text-center"
                 style={{
-                  backgroundColor: `${content.colors.surface}80`,
-                  borderColor: `${content.colors.text}0a`,
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
+                  backgroundColor: badge.isRed ? `${content.colors.accent2}08` : content.colors.surface,
+                  borderColor: badge.isRed ? `${content.colors.accent2}25` : 'rgba(0,0,0,0.07)',
+                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
                 }}
                 initial={{ opacity: 0, scale: 0.92 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + i * 0.07 }}
               >
-                <div className="font-grotesk text-sm sm:text-base font-bold mb-1" style={{ color: content.colors.accent }}>
+                <div
+                  className="font-grotesk text-sm sm:text-base font-bold mb-1"
+                  style={{ color: badge.isRed ? content.colors.accent2 : content.colors.accent }}
+                >
                   {badge.value}
                 </div>
                 <div className="text-xs font-semibold mb-0.5" style={{ color: content.colors.text }}>
