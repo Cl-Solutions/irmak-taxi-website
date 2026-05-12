@@ -176,7 +176,7 @@ export default function Trust({ mode, content }: TrustProps) {
                   <img
                     src={loc.img}
                     alt={loc.label}
-                    className="w-full h-44 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-44 sm:h-48 object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                   {/* Yellow overlay hint on hover */}
                   <div
