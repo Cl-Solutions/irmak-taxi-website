@@ -49,11 +49,11 @@ export default function Navbar({ mode, content, onModeChange }: NavbarProps) {
   return (
     <motion.header
       className="fixed top-0 left-0 right-0 z-50"
+      style={{ WebkitBackdropFilter: navBlur }}
       animate={{
         backgroundColor: navBg,
         boxShadow: navBorder,
         backdropFilter: navBlur,
-        WebkitBackdropFilter: navBlur,
       }}
       transition={{ duration: 0.28 }}
     >
