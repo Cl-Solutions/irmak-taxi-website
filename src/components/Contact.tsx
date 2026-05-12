@@ -23,58 +23,63 @@ export default function Contact({ mode, content }: ContactProps) {
   return (
     <section
       id="contact"
-      className="py-28 relative"
+      className="py-16 sm:py-24 lg:py-28 relative"
       style={{ backgroundColor: content.colors.secondary }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
         <motion.div
-          className="mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          className="mb-10 sm:mb-14 lg:mb-16"
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.55 }}
+          transition={{ duration: 0.5 }}
         >
           <span
-            className="font-mono-display text-xs tracking-widest uppercase mb-4 block"
+            className="font-mono-display text-xs tracking-widest uppercase mb-3 block"
             style={{ color: content.colors.accent }}
           >
             — Kontakt & Buchung
           </span>
           <h2
-            className="font-grotesk text-4xl lg:text-5xl font-bold"
+            className="font-grotesk text-3xl sm:text-4xl lg:text-5xl font-bold"
             style={{ color: content.colors.text }}
           >
             Wir sind für Sie da
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        {/* Two-column on lg, stacked on mobile — use y-only animations to avoid x-overflow */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
 
-          {/* Left — phone numbers prominent + details */}
+          {/* Left — phone numbers */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
+            transition={{ duration: 0.5 }}
           >
-            <p className="font-mono-display text-xs tracking-widest uppercase mb-5" style={{ color: content.colors.muted }}>
+            <p
+              className="font-mono-display text-xs tracking-widest uppercase mb-4"
+              style={{ color: content.colors.muted }}
+            >
               Telefon
             </p>
 
-            <div className="flex flex-col gap-3 mb-8">
+            <div className="flex flex-col gap-3 mb-6 sm:mb-8">
               {content.contact.phones.map((phone, i) => (
                 <motion.a
                   key={phone.number}
                   href={`tel:${phone.number.replace(/\s/g, '')}`}
-                  className="group flex items-center gap-4 p-5 rounded-2xl border"
+                  className="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border min-h-[72px]"
                   style={{
                     backgroundColor: i === 0 ? `${content.colors.accent}12` : content.colors.surface,
                     borderColor: i === 0 ? `${content.colors.accent}35` : `${content.colors.text}08`,
                   }}
-                  whileHover={{ x: 4, borderColor: `${content.colors.accent}60` }}
-                  transition={{ duration: 0.18 }}
+                  whileHover={{ borderColor: `${content.colors.accent}60` }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
@@ -82,28 +87,28 @@ export default function Contact({ mode, content }: ContactProps) {
                   >
                     <Phone size={18} style={{ color: content.colors.accent }} />
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="text-xs mb-0.5" style={{ color: content.colors.muted }}>
                       {phone.label}
                     </div>
                     <div
-                      className="font-mono-display font-bold text-xl tracking-tight"
+                      className="font-mono-display font-bold text-lg sm:text-xl tracking-tight"
                       style={{ color: content.colors.text }}
                     >
                       {phone.number}
                     </div>
                   </div>
                   <ChevronRight
-                    size={18}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    size={16}
+                    className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                     style={{ color: content.colors.accent }}
                   />
                 </motion.a>
               ))}
             </div>
 
-            {/* Other info */}
-            <div className="grid grid-cols-1 gap-3">
+            {/* Info rows */}
+            <div className="grid grid-cols-1 gap-2.5 sm:gap-3">
               {[
                 { Icon: Mail, label: 'E-Mail', value: content.contact.email },
                 { Icon: MapPin, label: 'Adresse', value: content.contact.address },
@@ -111,7 +116,7 @@ export default function Contact({ mode, content }: ContactProps) {
               ].map(({ Icon, label, value }) => (
                 <div
                   key={label}
-                  className="flex items-start gap-4 p-4 rounded-xl"
+                  className="flex items-start gap-3 p-3.5 sm:p-4 rounded-xl"
                   style={{ backgroundColor: `${content.colors.surface}70` }}
                 >
                   <div
@@ -120,11 +125,11 @@ export default function Contact({ mode, content }: ContactProps) {
                   >
                     <Icon size={14} style={{ color: content.colors.accent }} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs font-semibold mb-0.5" style={{ color: content.colors.muted }}>
                       {label}
                     </div>
-                    <div className="text-sm font-medium" style={{ color: content.colors.text }}>
+                    <div className="text-sm font-medium break-words" style={{ color: content.colors.text }}>
                       {value}
                     </div>
                   </div>
@@ -135,25 +140,25 @@ export default function Contact({ mode, content }: ContactProps) {
 
           {/* Right — form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
             <div
-              className="p-7 lg:p-9 rounded-2xl border"
+              className="p-5 sm:p-7 lg:p-8 rounded-2xl border"
               style={{
-                backgroundColor: `${content.colors.surface}`,
+                backgroundColor: content.colors.surface,
                 borderColor: `${content.colors.text}0a`,
               }}
             >
               <h3
-                className="font-grotesk text-xl font-bold mb-1"
+                className="font-grotesk text-lg sm:text-xl font-bold mb-1"
                 style={{ color: content.colors.text }}
               >
                 Rückruf anfordern
               </h3>
-              <p className="text-sm mb-7" style={{ color: content.colors.muted }}>
+              <p className="text-sm mb-6" style={{ color: content.colors.muted }}>
                 Wir melden uns so schnell wie möglich bei Ihnen.
               </p>
 
@@ -177,9 +182,9 @@ export default function Contact({ mode, content }: ContactProps) {
                       value={form[field.id as 'name' | 'phone']}
                       onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
                       required
-                      className="w-full px-4 py-3 rounded-xl border outline-none text-sm font-grotesk transition-all"
+                      className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk transition-all min-h-[48px]"
                       style={{
-                        backgroundColor: `${content.colors.bg}`,
+                        backgroundColor: content.colors.bg,
                         borderColor: `${content.colors.text}12`,
                         color: content.colors.text,
                       }}
@@ -201,15 +206,15 @@ export default function Contact({ mode, content }: ContactProps) {
                     id="message"
                     placeholder={
                       isKranken
-                        ? 'Art der Fahrt, Datum, besondere Anforderungen...'
+                        ? 'Art der Fahrt, Datum, Anforderungen...'
                         : 'Ziel, Datum, Uhrzeit, Personen...'
                     }
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border outline-none text-sm font-grotesk resize-none transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk resize-none transition-all"
                     style={{
-                      backgroundColor: `${content.colors.bg}`,
+                      backgroundColor: content.colors.bg,
                       borderColor: `${content.colors.text}12`,
                       color: content.colors.text,
                     }}
@@ -220,7 +225,7 @@ export default function Contact({ mode, content }: ContactProps) {
 
                 <motion.button
                   type="submit"
-                  className="flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold font-grotesk text-sm mt-1"
+                  className="flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold font-grotesk text-sm mt-1 min-h-[52px]"
                   style={{
                     backgroundColor: content.colors.accent,
                     color: isKranken ? '#fff' : '#000',

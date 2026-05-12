@@ -17,44 +17,44 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
   return (
     <section
       id="why-us"
-      className="py-28 relative overflow-hidden"
+      className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
       style={{ backgroundColor: content.colors.bg }}
     >
-      {/* Glow blobs */}
-      <motion.div
-        className="absolute -right-48 top-1/3 w-96 h-96 rounded-full blur-3xl pointer-events-none"
-        style={{ backgroundColor: content.colors.accent, opacity: 0.06 }}
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 7, repeat: Infinity }}
+      {/* Glow blob — offset so it doesn't cause overflow */}
+      <div
+        className="absolute right-0 top-1/3 w-72 sm:w-96 h-72 sm:h-96 rounded-full blur-3xl pointer-events-none opacity-[0.06]"
+        style={{ backgroundColor: content.colors.accent, transform: 'translateX(50%)' }}
       />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header row */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-16">
+        {/* Header — big number hidden on mobile to save space */}
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-6 mb-10 sm:mb-14 lg:mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
+            transition={{ duration: 0.5 }}
           >
             <span
-              className="font-mono-display text-xs tracking-widest uppercase mb-4 block"
+              className="font-mono-display text-xs tracking-widest uppercase mb-3 block"
               style={{ color: content.colors.accent }}
             >
               — Warum uns wählen
             </span>
             <h2
-              className="font-grotesk text-4xl lg:text-5xl font-bold leading-tight"
+              className="font-grotesk text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight"
               style={{ color: content.colors.text }}
             >
-              {isKranken ? 'Medizinische\nKompetenz trifft\npersönlichen Service' : 'Der Unterschied,\nden Sie\nspüren werden'}
+              {isKranken
+                ? 'Medizinische Kompetenz\ntrifft persönlichen Service'
+                : 'Der Unterschied,\nden Sie spüren werden'}
             </h2>
           </motion.div>
 
-          {/* Big accent number */}
+          {/* Decorative number — only on lg+ to avoid crowding mobile */}
           <motion.div
-            className="shrink-0 text-right"
+            className="hidden lg:block shrink-0 text-right"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -62,43 +62,44 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           >
             <div
               className="font-mono-display font-bold leading-none"
-              style={{ fontSize: 'clamp(5rem, 12vw, 10rem)', color: `${content.colors.accent}15` }}
+              style={{ fontSize: 'clamp(5rem, 10vw, 9rem)', color: `${content.colors.accent}12` }}
             >
               {isKranken ? '10+' : '24/7'}
             </div>
-            <div className="text-sm font-semibold -mt-4" style={{ color: content.colors.muted }}>
+            <div className="text-sm font-semibold -mt-3" style={{ color: content.colors.muted }}>
               {isKranken ? 'Jahre Erfahrung' : 'Für Sie da'}
             </div>
           </motion.div>
         </div>
 
-        {/* USP grid — horizontal list style */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16">
+        {/* USP grid — 1 col mobile, 2 col sm+ */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-10 sm:mb-14 lg:mb-16">
           {content.usps.map((usp, i) => {
             const Icon = iconMap[usp.icon] || ShieldCheck;
             return (
               <motion.div
                 key={usp.title}
-                className="flex gap-5 p-6 lg:p-7 rounded-2xl border group"
+                className="flex gap-4 p-5 sm:p-6 lg:p-7 rounded-2xl border"
                 style={{
                   backgroundColor: content.colors.surface,
                   borderColor: `${content.colors.text}08`,
                 }}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
+                transition={{ duration: 0.4, delay: Math.min(i * 0.08, 0.24) }}
                 whileHover={{ borderColor: `${content.colors.accent}35` }}
               >
+                {/* Icon — 44px touch-safe even if not interactive */}
                 <div
-                  className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                  className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center"
                   style={{ backgroundColor: `${content.colors.accent}15` }}
                 >
-                  <Icon size={22} style={{ color: content.colors.accent }} />
+                  <Icon size={20} style={{ color: content.colors.accent }} />
                 </div>
                 <div>
                   <h3
-                    className="font-grotesk font-bold text-base mb-1.5"
+                    className="font-grotesk font-bold text-base mb-1.5 leading-snug"
                     style={{ color: content.colors.text }}
                   >
                     {usp.title}
@@ -112,11 +113,11 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
           })}
         </div>
 
-        {/* Full-width CTA band */}
+        {/* CTA band — stacks on mobile */}
         <motion.div
-          className="relative overflow-hidden rounded-2xl p-8 lg:p-12 flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="relative overflow-hidden rounded-2xl p-6 sm:p-8 lg:p-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 sm:gap-6"
           style={{
-            background: `linear-gradient(135deg, ${content.colors.accent}18 0%, ${content.colors.accent}08 100%)`,
+            background: `linear-gradient(135deg, ${content.colors.accent}18 0%, ${content.colors.accent}07 100%)`,
             border: `1px solid ${content.colors.accent}30`,
           }}
           initial={{ opacity: 0, y: 20 }}
@@ -126,23 +127,25 @@ export default function WhyUs({ mode, content }: WhyUsProps) {
         >
           <div>
             <h3
-              className="font-grotesk text-2xl lg:text-3xl font-bold mb-2"
+              className="font-grotesk text-xl sm:text-2xl lg:text-3xl font-bold mb-2"
               style={{ color: content.colors.text }}
             >
               {isKranken ? 'Brauchen Sie eine Fahrt?' : 'Brauchen Sie ein Taxi?'}
             </h3>
-            <p style={{ color: content.colors.muted }}>
-              {isKranken ? 'Wir sind Mo–Fr 8–16 Uhr erreichbar, Notfälle 24/7.' : 'Rund um die Uhr, 365 Tage im Jahr für Sie da.'}
+            <p className="text-sm sm:text-base" style={{ color: content.colors.muted }}>
+              {isKranken
+                ? 'Wir sind Mo–Fr 8–16 Uhr erreichbar, Notfälle 24/7.'
+                : 'Rund um die Uhr, 365 Tage im Jahr für Sie da.'}
             </p>
           </div>
           <motion.a
             href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-            className="shrink-0 px-8 py-4 rounded-xl font-bold font-grotesk text-base"
+            className="w-full sm:w-auto shrink-0 flex items-center justify-center px-7 py-4 rounded-xl font-bold font-grotesk text-base min-h-[52px]"
             style={{
               backgroundColor: content.colors.accent,
               color: isKranken ? '#fff' : '#000',
             }}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
           >
             {isKranken ? '07041 816743' : '07252 94940'}
