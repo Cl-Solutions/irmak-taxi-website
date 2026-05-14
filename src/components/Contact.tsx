@@ -27,10 +27,10 @@ export default function Contact({ mode, content }: ContactProps) {
     <section
       id="contact"
       className="py-16 sm:py-24 lg:py-28 relative"
-      style={{ backgroundColor: content.colors.secondary }}
+      style={{ backgroundColor: isKranken ? '#ffffff' : content.colors.secondary }}
     >
       {isKranken && (
-        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}20` }} />
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}18` }} />
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,17 +68,26 @@ export default function Contact({ mode, content }: ContactProps) {
           >
             {/* Hours banner */}
             <div
-              className="flex items-center gap-3 p-4 rounded-2xl mb-5 sm:mb-6 border"
+              className="flex items-center gap-3 p-4 sm:p-5 rounded-2xl mb-5 sm:mb-6"
               style={isKranken
-                ? { backgroundColor: `${content.colors.accent2}08`, borderColor: `${content.colors.accent2}25` }
-                : { backgroundColor: `${content.colors.accent}10`, borderColor: `${content.colors.accent}28` }
+                ? {
+                    backgroundColor: '#f8faf8',
+                    border: `1px solid rgba(0,148,24,0.12)`,
+                  }
+                : {
+                    backgroundColor: `${content.colors.accent}10`,
+                    border: `1px solid ${content.colors.accent}28`,
+                  }
               }
             >
               <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                style={{ backgroundColor: isKranken ? `${content.colors.accent2}15` : `${content.colors.accent}18` }}
+                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                style={isKranken
+                  ? { background: 'linear-gradient(135deg, rgba(0,148,24,0.16), rgba(0,148,24,0.04))' }
+                  : { backgroundColor: `${content.colors.accent}18` }
+                }
               >
-                <Clock size={18} style={{ color: isKranken ? content.colors.accent2 : content.colors.accent }} />
+                <Clock size={18} style={{ color: content.colors.accent }} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-bold uppercase tracking-wide mb-0.5" style={{ color: content.colors.muted }}>
@@ -109,22 +118,34 @@ export default function Contact({ mode, content }: ContactProps) {
                 <motion.a
                   key={phone.number}
                   href={`tel:${phone.number.replace(/\s/g, '')}`}
-                  className="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border min-h-[72px] relative overflow-hidden"
-                  style={{
-                    backgroundColor: i === 0
-                      ? (isKranken ? `${content.colors.accent}08` : `${content.colors.accent}10`)
-                      : content.colors.surface,
-                    borderColor: i === 0
-                      ? (isKranken ? `${content.colors.accent}25` : `${content.colors.accent}30`)
-                      : (isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}08`),
-                    boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
-                  }}
-                  whileHover={{ borderColor: `${content.colors.accent}55` }}
+                  className="group flex items-center gap-4 p-4 sm:p-5 min-h-[72px] relative overflow-hidden"
+                  style={isKranken
+                    ? {
+                        backgroundColor: i === 0 ? `${content.colors.accent}06` : '#f8faf8',
+                        borderRadius: '1.25rem',
+                        boxShadow: i === 0
+                          ? '0 2px 20px rgba(0,148,24,0.09)'
+                          : '0 1px 12px rgba(0,0,0,0.04)',
+                      }
+                    : {
+                        backgroundColor: i === 0
+                          ? `${content.colors.accent}10`
+                          : content.colors.surface,
+                        borderRadius: '1rem',
+                        border: i === 0
+                          ? `1px solid ${content.colors.accent}30`
+                          : `1px solid ${content.colors.text}08`,
+                      }
+                  }
+                  whileHover={isKranken
+                    ? { y: -3, boxShadow: '0 10px 32px rgba(0,148,24,0.12)' }
+                    : { borderColor: `${content.colors.accent}55` }
+                  }
                   whileTap={{ scale: 0.98 }}
                   transition={{ duration: 0.15 }}
                 >
-                  {/* Pulsing ring on primary */}
-                  {i === 0 && (
+                  {/* Pulsing ring on primary (non-Kranken only) */}
+                  {i === 0 && !isKranken && (
                     <motion.div
                       className="absolute inset-0 rounded-2xl pointer-events-none"
                       style={{ border: `1.5px solid ${content.colors.accent}` }}
@@ -133,8 +154,17 @@ export default function Contact({ mode, content }: ContactProps) {
                     />
                   )}
                   <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: `${content.colors.accent}18` }}
+                    className="flex items-center justify-center shrink-0"
+                    style={isKranken
+                      ? {
+                          width: '2.75rem', height: '2.75rem', borderRadius: '50%',
+                          background: 'linear-gradient(135deg, rgba(0,148,24,0.16), rgba(0,148,24,0.04))',
+                        }
+                      : {
+                          width: '2.75rem', height: '2.75rem', borderRadius: '0.75rem',
+                          backgroundColor: `${content.colors.accent}18`,
+                        }
+                    }
                   >
                     <Phone size={18} style={{ color: content.colors.accent }} />
                   </div>
@@ -163,13 +193,25 @@ export default function Contact({ mode, content }: ContactProps) {
               href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 w-full p-4 rounded-2xl border mb-5 sm:mb-6 min-h-[56px] font-bold font-grotesk text-sm"
-              style={{
-                backgroundColor: 'rgba(37,211,102,0.08)',
-                borderColor: 'rgba(37,211,102,0.25)',
-                color: isKranken ? '#1a8a3a' : '#25d366',
-              }}
-              whileHover={{ backgroundColor: 'rgba(37,211,102,0.14)', scale: 1.01 }}
+              className="flex items-center justify-center gap-3 w-full p-4 mb-5 sm:mb-6 min-h-[52px] font-bold font-grotesk text-sm"
+              style={isKranken
+                ? {
+                    backgroundColor: 'rgba(37,211,102,0.07)',
+                    borderRadius: '1.25rem',
+                    color: '#1a8a3a',
+                    boxShadow: '0 1px 12px rgba(37,211,102,0.1)',
+                  }
+                : {
+                    backgroundColor: 'rgba(37,211,102,0.08)',
+                    borderRadius: '1rem',
+                    border: '1px solid rgba(37,211,102,0.25)',
+                    color: '#25d366',
+                  }
+              }
+              whileHover={isKranken
+                ? { y: -2, boxShadow: '0 6px 24px rgba(37,211,102,0.15)' }
+                : { backgroundColor: 'rgba(37,211,102,0.14)', scale: 1.01 }
+              }
               whileTap={{ scale: 0.98 }}
             >
               <MessageCircle size={18} />
@@ -186,13 +228,22 @@ export default function Contact({ mode, content }: ContactProps) {
                   key={label}
                   className="flex items-start gap-3 p-3.5 sm:p-4 rounded-xl"
                   style={{
-                    backgroundColor: isKranken ? 'rgba(0,0,0,0.03)' : `${content.colors.surface}70`,
-                    border: isKranken ? '1px solid rgba(0,0,0,0.06)' : 'none',
+                    backgroundColor: isKranken ? '#f8faf8' : `${content.colors.surface}70`,
+                    border: isKranken ? '1px solid rgba(0,148,24,0.08)' : 'none',
                   }}
                 >
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ backgroundColor: `${content.colors.accent}15` }}
+                    className="flex items-center justify-center shrink-0 mt-0.5"
+                    style={isKranken
+                      ? {
+                          width: '2rem', height: '2rem', borderRadius: '50%',
+                          background: 'linear-gradient(135deg, rgba(0,148,24,0.14), rgba(0,148,24,0.04))',
+                        }
+                      : {
+                          width: '2rem', height: '2rem', borderRadius: '0.5rem',
+                          backgroundColor: `${content.colors.accent}15`,
+                        }
+                    }
                   >
                     <Icon size={14} style={{ color: content.colors.accent }} />
                   </div>
@@ -217,12 +268,20 @@ export default function Contact({ mode, content }: ContactProps) {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <div
-              className="p-5 sm:p-7 lg:p-8 rounded-2xl border"
-              style={{
-                backgroundColor: content.colors.surface,
-                borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
-                boxShadow: isKranken ? '0 2px 12px rgba(0,0,0,0.06)' : 'none',
-              }}
+              className="p-5 sm:p-7 lg:p-8"
+              style={isKranken
+                ? {
+                    backgroundColor: '#f8faf8',
+                    borderRadius: '1.5rem',
+                    boxShadow: '0 4px 32px rgba(0,148,24,0.07)',
+                  }
+                : {
+                    backgroundColor: content.colors.surface,
+                    borderRadius: '1rem',
+                    border: `1px solid ${content.colors.text}0a`,
+                    boxShadow: 'none',
+                  }
+              }
             >
               <h3
                 className="font-grotesk text-lg sm:text-xl font-bold mb-1"
@@ -254,14 +313,22 @@ export default function Contact({ mode, content }: ContactProps) {
                       value={form[field.id as 'name' | 'phone']}
                       onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
                       required
-                      className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk transition-all min-h-[48px]"
+                      className="w-full px-4 py-3.5 outline-none text-sm font-grotesk transition-all min-h-[48px]"
                       style={{
-                        backgroundColor: content.colors.bg,
-                        borderColor: isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`,
+                        backgroundColor: '#ffffff',
+                        borderRadius: isKranken ? '0.875rem' : '0.75rem',
+                        border: isKranken ? '1px solid rgba(0,148,24,0.15)' : `1px solid ${content.colors.text}12`,
                         color: content.colors.text,
+                        boxShadow: isKranken ? '0 1px 8px rgba(0,148,24,0.05)' : 'none',
                       }}
-                      onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
-                      onBlur={(e) => (e.target.style.borderColor = isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`)}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = content.colors.accent;
+                        e.target.style.boxShadow = `0 0 0 3px ${content.colors.accent}18`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = isKranken ? 'rgba(0,148,24,0.15)' : `${content.colors.text}12`;
+                        e.target.style.boxShadow = isKranken ? '0 1px 8px rgba(0,148,24,0.05)' : 'none';
+                      }}
                     />
                   </div>
                 ))}
@@ -280,21 +347,33 @@ export default function Contact({ mode, content }: ContactProps) {
                     rows={4}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3.5 rounded-xl border outline-none text-sm font-grotesk resize-none transition-all"
+                    className="w-full px-4 py-3.5 outline-none text-sm font-grotesk resize-none transition-all"
                     style={{
-                      backgroundColor: content.colors.bg,
-                      borderColor: isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`,
+                      backgroundColor: '#ffffff',
+                      borderRadius: isKranken ? '0.875rem' : '0.75rem',
+                      border: isKranken ? '1px solid rgba(0,148,24,0.15)' : `1px solid ${content.colors.text}12`,
                       color: content.colors.text,
+                      boxShadow: isKranken ? '0 1px 8px rgba(0,148,24,0.05)' : 'none',
                     }}
-                    onFocus={(e) => (e.target.style.borderColor = content.colors.accent)}
-                    onBlur={(e) => (e.target.style.borderColor = isKranken ? 'rgba(0,0,0,0.1)' : `${content.colors.text}12`)}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = content.colors.accent;
+                      e.target.style.boxShadow = `0 0 0 3px ${content.colors.accent}18`;
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = isKranken ? 'rgba(0,148,24,0.15)' : `${content.colors.text}12`;
+                      e.target.style.boxShadow = isKranken ? '0 1px 8px rgba(0,148,24,0.05)' : 'none';
+                    }}
                   />
                 </div>
 
                 <motion.button
                   type="submit"
-                  className="flex items-center justify-center gap-2.5 py-4 rounded-xl font-bold font-grotesk text-sm mt-1 min-h-[52px]"
-                  style={{ backgroundColor: content.colors.accent, color: '#fff' }}
+                  className="flex items-center justify-center gap-2.5 py-4 font-bold font-grotesk text-sm mt-1 min-h-[52px]"
+                  style={{
+                    backgroundColor: content.colors.accent,
+                    color: '#fff',
+                    borderRadius: isKranken ? '1rem' : '0.75rem',
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                 >

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import {
   Stethoscope, Accessibility, Zap, Heart, Building2, MapPin,
-  Car, Plane, Package, Users, Navigation, PawPrint,
+  Car, Plane, Package, Users, Navigation, PawPrint, CheckCircle2,
 } from 'lucide-react';
 import type { Mode, ModeContent } from '../types';
 import TiltCard from './ui/TiltCard';
@@ -23,7 +23,7 @@ export default function Services({ mode, content }: ServicesProps) {
     <section
       id="services"
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
-      style={{ backgroundColor: content.colors.bg }}
+      style={{ backgroundColor: isKranken ? '#f8faf8' : content.colors.bg }}
     >
       {/* Top glow — only for Taxi dark mode */}
       {!isKranken && (
@@ -32,9 +32,9 @@ export default function Services({ mode, content }: ServicesProps) {
           style={{ backgroundColor: content.colors.accent }}
         />
       )}
-      {/* Krankenfahrten: subtle red top border */}
+      {/* Krankenfahrten: subtle section divider */}
       {isKranken && (
-        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}30` }} />
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ backgroundColor: `${content.colors.accent2}20` }} />
       )}
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,9 +75,51 @@ export default function Services({ mode, content }: ServicesProps) {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {content.services.map((service, i) => {
             const Icon = iconMap[service.icon] || Car;
+
+            /* ── Krankenfahrten card — soft, white, shadow-only ── */
+            if (isKranken) {
+              return (
+                <motion.div
+                  key={service.title}
+                  className="group relative rounded-3xl p-6 sm:p-7 overflow-hidden h-full cursor-default"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    boxShadow: '0 2px 24px rgba(0,148,24,0.07)',
+                  }}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.4, delay: Math.min(i * 0.07, 0.28) }}
+                  whileHover={{ y: -6, boxShadow: '0 18px 52px rgba(0,148,24,0.13)' }}
+                >
+                  {/* Circular gradient icon */}
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center mb-5 shrink-0"
+                    style={{ background: 'linear-gradient(135deg, rgba(0,148,24,0.15) 0%, rgba(0,184,30,0.04) 100%)' }}
+                  >
+                    <Icon size={20} style={{ color: content.colors.accent }} />
+                  </div>
+
+                  <h3 className="font-grotesk text-base font-bold mb-2.5" style={{ color: content.colors.text }}>
+                    {service.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: content.colors.muted }}>
+                    {service.description}
+                  </p>
+
+                  {/* Bottom accent sweep on hover */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-[3px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: `linear-gradient(90deg, ${content.colors.accent}, rgba(0,148,24,0.15))` }}
+                  />
+                </motion.div>
+              );
+            }
+
+            /* ── Taxi card — TiltCard, original styling ── */
             return (
               <motion.div
                 key={service.title}
@@ -90,10 +132,9 @@ export default function Services({ mode, content }: ServicesProps) {
                   className="group relative rounded-2xl p-5 sm:p-6 lg:p-7 overflow-hidden border h-full cursor-default"
                   style={{
                     backgroundColor: content.colors.surface,
-                    borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
-                    boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
+                    borderColor: `${content.colors.text}0a`,
                   }}
-                  intensity={isKranken ? 5 : 8}
+                  intensity={8}
                 >
                   {/* Gradient border on hover */}
                   <motion.div
@@ -141,27 +182,52 @@ export default function Services({ mode, content }: ServicesProps) {
           })}
         </div>
 
-        {/* CTA row */}
-        <motion.div
-          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.25 }}
-        >
-          <motion.a
-            href={`tel:${isKranken ? '07041816743' : '0725294940'}`}
-            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold font-grotesk w-full sm:w-auto min-h-[48px]"
-            style={{ backgroundColor: content.colors.accent, color: isKranken ? '#fff' : '#000' }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+        {/* Reassurance strip — Kranken only */}
+        {isKranken && (
+          <motion.div
+            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 py-5 px-6 rounded-2xl"
+            style={{ backgroundColor: '#ffffff', boxShadow: '0 1px 16px rgba(0,148,24,0.06)' }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
           >
-            Jetzt Fahrt buchen →
-          </motion.a>
-          <span className="text-sm text-center" style={{ color: content.colors.muted }}>
-            {isKranken ? 'Krankenkassenpflichtige Fahrten möglich' : '24/7 erreichbar'}
-          </span>
-        </motion.div>
+            {[
+              'Alle gesetzlichen Krankenkassen',
+              'Direktabrechnung',
+              'Medizinisch ausgebildetes Personal',
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-2">
+                <CheckCircle2 size={15} style={{ color: content.colors.accent }} />
+                <span className="text-sm font-medium" style={{ color: content.colors.text }}>{item}</span>
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* CTA row — Taxi only */}
+        {!isKranken && (
+          <motion.div
+            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25 }}
+          >
+            <motion.a
+              href="tel:0725294940"
+              className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-bold font-grotesk w-full sm:w-auto min-h-[48px]"
+              style={{ backgroundColor: content.colors.accent, color: '#000' }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Jetzt Fahrt buchen →
+            </motion.a>
+            <span className="text-sm text-center" style={{ color: content.colors.muted }}>
+              24/7 erreichbar
+            </span>
+          </motion.div>
+        )}
       </div>
     </section>
   );

@@ -30,7 +30,7 @@ export default function Trust({ mode, content }: TrustProps) {
   return (
     <section
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
-      style={{ backgroundColor: isKranken ? content.colors.bg : content.colors.secondary }}
+      style={{ backgroundColor: isKranken ? '#f8faf8' : content.colors.secondary }}
     >
       {/* Subtle bg photo hint for Taxi */}
       {!isKranken && (
@@ -82,19 +82,28 @@ export default function Trust({ mode, content }: TrustProps) {
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              className="relative p-4 sm:p-6 rounded-2xl border text-center overflow-hidden"
-              style={{
-                backgroundColor: content.colors.surface,
-                borderColor: isKranken
-                  ? (stat.isEmergency ? `${content.colors.accent2}25` : 'rgba(0,0,0,0.07)')
-                  : `${content.colors.text}0a`,
-                boxShadow: isKranken ? '0 1px 4px rgba(0,0,0,0.05)' : 'none',
-              }}
+              className="relative p-4 sm:p-6 rounded-3xl text-center overflow-hidden cursor-default"
+              style={isKranken
+                ? {
+                    backgroundColor: stat.isEmergency ? `${content.colors.accent2}06` : '#ffffff',
+                    boxShadow: stat.isEmergency
+                      ? '0 2px 20px rgba(183,0,9,0.07)'
+                      : '0 2px 20px rgba(0,148,24,0.07)',
+                  }
+                : {
+                    backgroundColor: content.colors.surface,
+                    borderColor: `${content.colors.text}0a`,
+                    border: `1px solid ${content.colors.text}0a`,
+                  }
+              }
               initial={{ opacity: 0, scale: 0.92 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
-              whileHover={{ borderColor: isKranken && stat.isEmergency ? `${content.colors.accent2}50` : `${content.colors.accent}35` }}
+              whileHover={isKranken
+                ? { y: -4, boxShadow: stat.isEmergency ? '0 12px 36px rgba(183,0,9,0.11)' : '0 12px 36px rgba(0,148,24,0.11)' }
+                : { borderColor: `${content.colors.accent}35` }
+              }
             >
               <div
                 className="font-grotesk text-2xl sm:text-3xl font-bold mb-1 leading-none"
@@ -110,21 +119,31 @@ export default function Trust({ mode, content }: TrustProps) {
         </motion.div>
 
         {/* Testimonials */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 sm:mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-8 sm:mb-10">
           {content.testimonials.map((t, i) => (
             <motion.div
               key={i}
-              className="relative p-5 sm:p-7 rounded-2xl border"
-              style={{
-                backgroundColor: content.colors.surface,
-                borderColor: isKranken ? 'rgba(0,0,0,0.07)' : `${content.colors.text}0a`,
-                boxShadow: isKranken ? '0 1px 6px rgba(0,0,0,0.05)' : 'none',
-              }}
+              className="relative p-5 sm:p-7 cursor-default"
+              style={isKranken
+                ? {
+                    backgroundColor: '#ffffff',
+                    borderRadius: '1.5rem',
+                    boxShadow: '0 2px 24px rgba(0,148,24,0.07)',
+                  }
+                : {
+                    backgroundColor: content.colors.surface,
+                    borderRadius: '1rem',
+                    border: `1px solid ${content.colors.text}0a`,
+                  }
+              }
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: Math.min(i * 0.1, 0.2) }}
-              whileHover={{ borderColor: `${content.colors.accent}30` }}
+              whileHover={isKranken
+                ? { y: -5, boxShadow: '0 16px 48px rgba(0,148,24,0.11)' }
+                : { borderColor: `${content.colors.accent}30` }
+              }
             >
               <Quote size={28} className="mb-3 opacity-20" style={{ color: content.colors.accent }} />
               <div className="flex gap-1 mb-3">
@@ -138,7 +157,7 @@ export default function Trust({ mode, content }: TrustProps) {
               <div className="flex items-center gap-3">
                 <div
                   className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold font-grotesk shrink-0"
-                  style={{ backgroundColor: `${content.colors.accent}20`, color: content.colors.accent }}
+                  style={{ background: `linear-gradient(135deg, ${content.colors.accent}22, ${content.colors.accent}08)`, color: content.colors.accent }}
                 >
                   {t.author.split(' ')[0][0]}{t.author.split(' ')[1]?.[0] ?? ''}
                 </div>
@@ -150,7 +169,7 @@ export default function Trust({ mode, content }: TrustProps) {
           ))}
         </div>
 
-        {/* Taxi: Location cards with real photos — large, prominent, clickable */}
+        {/* Taxi: Location cards with real photos */}
         {!isKranken && (
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-3 gap-4"
@@ -178,7 +197,6 @@ export default function Trust({ mode, content }: TrustProps) {
                     alt={loc.label}
                     className="w-full h-44 sm:h-48 object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
-                  {/* Yellow overlay hint on hover */}
                   <div
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: `linear-gradient(to top, ${content.colors.accent}40, transparent 60%)` }}
@@ -225,16 +243,18 @@ export default function Trust({ mode, content }: TrustProps) {
             ].map((badge, i) => (
               <motion.div
                 key={badge.label}
-                className="p-4 sm:p-5 rounded-2xl border text-center"
+                className="p-4 sm:p-5 rounded-2xl text-center cursor-default"
                 style={{
-                  backgroundColor: badge.isRed ? `${content.colors.accent2}08` : content.colors.surface,
-                  borderColor: badge.isRed ? `${content.colors.accent2}25` : 'rgba(0,0,0,0.07)',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  backgroundColor: badge.isRed ? `${content.colors.accent2}06` : '#ffffff',
+                  boxShadow: badge.isRed
+                    ? '0 2px 16px rgba(183,0,9,0.08)'
+                    : '0 2px 16px rgba(0,148,24,0.06)',
                 }}
                 initial={{ opacity: 0, scale: 0.92 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 + i * 0.07 }}
+                whileHover={{ y: -4, boxShadow: badge.isRed ? '0 10px 32px rgba(183,0,9,0.12)' : '0 10px 32px rgba(0,148,24,0.1)' }}
               >
                 <div
                   className="font-grotesk text-sm sm:text-base font-bold mb-1"
