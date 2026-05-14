@@ -20,193 +20,205 @@ export default function Hero({ mode, content }: HeroProps) {
 
   const waNumber = isKranken ? '4907041816743' : '490725294940';
 
-  // ── KRANKENFAHRTEN: split — banner image LEFT, text RIGHT ───────────────────
+  // ── KRANKENFAHRTEN: full-bleed banner bg, text overlaid on the right ────────
   if (isKranken) {
     return (
       <section
         id="hero"
         ref={sectionRef}
-        className="relative"
-        style={{ backgroundColor: '#ffffff' }}
+        className="relative min-h-screen flex items-center overflow-hidden"
+        style={{ backgroundColor: '#f4fbf4' }}
       >
         {/* Red brand stripe */}
         <div className="absolute top-0 left-0 right-0 h-1 z-20" style={{ backgroundColor: '#b70009' }} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+        {/* Full-bleed background image with parallax — anchored left so logo stays visible */}
+        <motion.div className="absolute inset-0" style={{ y: bgY }}>
+          <img
+            src="/images/hero-banner.png"
+            alt=""
+            className="w-full h-full object-cover object-left"
+          />
+        </motion.div>
 
-          {/* ── LEFT: banner image, fills column ── */}
-          <motion.div
-            className="relative flex items-center justify-center overflow-hidden"
-            style={{ backgroundColor: '#f4fbf4', minHeight: '50vw' }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {/* Image fills full column, top-aligned, no cropping */}
-            <img
-              src="/images/hero-banner.png"
-              alt="irmak Krankenfahrten"
-              className="w-full h-full object-contain object-center"
-              style={{ maxHeight: '100vh' }}
-            />
-          </motion.div>
+        {/* Text content — pushed to the right half (empty area of image) */}
+        <motion.div
+          className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-14 sm:pt-28 sm:pb-16"
+          style={{ y: contentY }}
+        >
+          <div className="flex justify-end">
+            <div className="w-full max-w-lg">
 
-          {/* ── RIGHT: text content ── */}
-          <motion.div
-            className="flex flex-col justify-center px-6 sm:px-10 lg:px-12 xl:px-16 pt-24 pb-12 lg:pt-28 lg:pb-16"
-            style={{ backgroundColor: '#ffffff' }}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {/* Badge */}
-            <motion.div
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 self-start"
-              style={{
-                backgroundColor: 'rgba(0,148,24,0.08)',
-                border: '1.5px solid rgba(0,148,24,0.22)',
-                color: content.colors.accent,
-              }}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Star size={11} fill={content.colors.accent} style={{ color: content.colors.accent }} />
-              <span>4.9 / 5 · 500+ Fahrten</span>
-              <span style={{ color: content.colors.accent2 }}>· Enzkreis</span>
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              className="font-grotesk font-bold leading-[0.95] tracking-tight mb-5"
-              style={{ fontSize: 'clamp(2.6rem, 5vw, 5.5rem)' }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.15, delay: 0.2 }}
-            >
-              <span className="block" style={{ color: content.colors.text }}>
-                <SplitText text={line1} delay={0.25} />
-              </span>
-              <span className="block" style={{ color: content.colors.accent }}>
-                <SplitText text={line2} delay={0.38} />
-              </span>
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              className="text-base sm:text-lg leading-relaxed mb-8 max-w-md font-medium"
-              style={{ color: content.colors.muted }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.55 }}
-            >
-              {content.subheadline}
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 mb-8"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.65 }}
-            >
-              <motion.a
-                href="tel:07041816743"
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl text-base font-bold font-grotesk w-full sm:w-auto min-h-[52px]"
-                style={{
-                  backgroundColor: content.colors.accent,
-                  color: '#fff',
-                  boxShadow: `0 4px 20px ${content.colors.accent}40`,
-                }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Phone size={17} />
-                {content.ctaPrimary}
-              </motion.a>
-
-              <motion.a
-                href={`https://wa.me/${waNumber}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl text-base font-semibold w-full sm:w-auto min-h-[52px]"
-                style={{
-                  backgroundColor: 'rgba(37,211,102,0.09)',
-                  border: '1.5px solid rgba(37,211,102,0.28)',
-                  color: '#1a8a3a',
-                }}
-                whileHover={{ scale: 1.03, backgroundColor: 'rgba(37,211,102,0.15)' }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                WhatsApp
-              </motion.a>
-
-              <motion.a
-                href="#services"
-                className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-base font-semibold w-full sm:w-auto min-h-[52px]"
-                style={{
-                  backgroundColor: 'rgba(0,0,0,0.04)',
-                  border: '1.5px solid rgba(0,0,0,0.10)',
-                  color: content.colors.text,
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                {content.ctaSecondary}
-              </motion.a>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              className="flex flex-wrap gap-2 sm:gap-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.78 }}
-            >
-              {content.stats.map((stat, i) => {
-                const isEmergency = stat.value === '24/7' || stat.label.includes('Notfall');
-                return (
-                  <motion.div
-                    key={stat.label}
-                    className="rounded-xl px-4 py-2.5"
-                    style={{
-                      backgroundColor: isEmergency ? `${content.colors.accent2}08` : `${content.colors.accent}08`,
-                      border: `1.5px solid ${isEmergency ? content.colors.accent2 : content.colors.accent}20`,
-                    }}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.78 + i * 0.07 }}
-                  >
-                    <div
-                      className="font-mono-display text-lg font-bold leading-tight"
-                      style={{ color: isEmergency ? content.colors.accent2 : content.colors.accent }}
-                    >
-                      {stat.value}
-                    </div>
-                    <div className="text-xs" style={{ color: content.colors.muted }}>
-                      {stat.label}
-                    </div>
-                  </motion.div>
-                );
-              })}
+              {/* Badge */}
               <motion.div
-                className="rounded-xl px-4 py-2.5 flex items-center gap-2"
-                style={{ backgroundColor: 'rgba(0,0,0,0.04)', border: '1.5px solid rgba(0,0,0,0.08)' }}
-                initial={{ opacity: 0, y: 6 }}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.75)',
+                  border: '1.5px solid rgba(0,148,24,0.25)',
+                  color: content.colors.accent,
+                  backdropFilter: 'blur(8px)',
+                }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.06 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <MapPin size={13} style={{ color: content.colors.accent }} />
-                <span className="text-xs" style={{ color: content.colors.muted }}>
-                  Enzkreis & Kraichgau
-                </span>
+                <Star size={11} fill={content.colors.accent} style={{ color: content.colors.accent }} />
+                <span>4.9 / 5 · 500+ Fahrten</span>
+                <span style={{ color: content.colors.accent2 }}>· Enzkreis</span>
               </motion.div>
-            </motion.div>
-          </motion.div>
-        </div>
+
+              {/* Headline */}
+              <motion.h1
+                className="font-grotesk font-bold leading-[0.95] tracking-tight mb-5"
+                style={{ fontSize: 'clamp(3rem, 6vw, 6rem)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.15, delay: 0.1 }}
+              >
+                <span className="block" style={{ color: content.colors.text }}>
+                  <SplitText text={line1} delay={0.18} />
+                </span>
+                <span className="block" style={{ color: content.colors.accent }}>
+                  <SplitText text={line2} delay={0.32} />
+                </span>
+              </motion.h1>
+
+              {/* Subheadline */}
+              <motion.p
+                className="text-base sm:text-lg leading-relaxed mb-8 max-w-md font-medium"
+                style={{ color: content.colors.muted }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.52 }}
+              >
+                {content.subheadline}
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-3 mb-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.62 }}
+              >
+                <motion.a
+                  href="tel:07041816743"
+                  className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl text-base font-bold font-grotesk w-full sm:w-auto min-h-[52px]"
+                  style={{
+                    backgroundColor: content.colors.accent,
+                    color: '#fff',
+                    boxShadow: `0 4px 20px ${content.colors.accent}45`,
+                  }}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Phone size={17} />
+                  {content.ctaPrimary}
+                </motion.a>
+
+                <motion.a
+                  href={`https://wa.me/${waNumber}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl text-base font-semibold w-full sm:w-auto min-h-[52px]"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.8)',
+                    border: '1.5px solid rgba(37,211,102,0.35)',
+                    color: '#1a8a3a',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                  whileHover={{ scale: 1.03, backgroundColor: 'rgba(37,211,102,0.12)' }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  WhatsApp
+                </motion.a>
+
+                <motion.a
+                  href="#services"
+                  className="flex items-center justify-center gap-2 px-6 py-4 rounded-xl text-base font-semibold w-full sm:w-auto min-h-[52px]"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.7)',
+                    border: '1.5px solid rgba(0,0,0,0.12)',
+                    color: content.colors.text,
+                    backdropFilter: 'blur(8px)',
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  {content.ctaSecondary}
+                </motion.a>
+              </motion.div>
+
+              {/* Stats */}
+              <motion.div
+                className="flex flex-wrap gap-2 sm:gap-3"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.75 }}
+              >
+                {content.stats.map((stat, i) => {
+                  const isEmergency = stat.value === '24/7' || stat.label.includes('Notfall');
+                  return (
+                    <motion.div
+                      key={stat.label}
+                      className="rounded-xl px-4 py-2.5"
+                      style={{
+                        backgroundColor: 'rgba(255,255,255,0.75)',
+                        border: `1.5px solid ${isEmergency ? content.colors.accent2 : content.colors.accent}25`,
+                        backdropFilter: 'blur(8px)',
+                      }}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.75 + i * 0.07 }}
+                    >
+                      <div
+                        className="font-mono-display text-lg font-bold leading-tight"
+                        style={{ color: isEmergency ? content.colors.accent2 : content.colors.accent }}
+                      >
+                        {stat.value}
+                      </div>
+                      <div className="text-xs" style={{ color: content.colors.muted }}>
+                        {stat.label}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+                <motion.div
+                  className="rounded-xl px-4 py-2.5 flex items-center gap-2"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.75)',
+                    border: '1.5px solid rgba(0,0,0,0.08)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.05 }}
+                >
+                  <MapPin size={13} style={{ color: content.colors.accent }} />
+                  <span className="text-xs" style={{ color: content.colors.muted }}>
+                    Enzkreis & Kraichgau
+                  </span>
+                </motion.div>
+              </motion.div>
+
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Scroll hint */}
+        <motion.a
+          href="#services"
+          className="absolute bottom-5 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-1.5 z-10"
+          style={{ color: 'rgba(0,0,0,0.3)' }}
+          animate={{ y: [0, 7, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity }}
+        >
+          <span className="text-[10px] font-semibold tracking-widest uppercase">Scroll</span>
+          <ChevronDown size={18} />
+        </motion.a>
       </section>
     );
   }
