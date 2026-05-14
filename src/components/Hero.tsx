@@ -225,7 +225,7 @@ export default function Hero({ mode, content }: HeroProps) {
 
   // ── TAXI: full-bleed photo hero ────────────────────────────────────────────
   return (
-    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-end overflow-hidden">
+    <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
 
       {/* Parallax photo */}
       <AnimatePresence mode="wait">
@@ -238,23 +238,28 @@ export default function Hero({ mode, content }: HeroProps) {
           exit={{ opacity: 0 }}
           transition={{ duration: 1.0, ease: 'easeOut' }}
         >
-          <img src={content.heroImage} alt="" className="w-full h-full object-cover object-center" />
+          <img src="/images/taxi-hero-new.png" alt="" className="w-full h-full object-cover object-center" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Dark overlay */}
+      {/* Horizontal gradient — heavy left (text area), fades right (taxi visible) */}
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(to top, rgba(5,4,0,0.97) 0%, rgba(5,4,0,0.88) 38%, rgba(5,4,0,0.6) 65%, rgba(5,4,0,0.22) 100%)' }}
+        style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.70) 35%, rgba(0,0,0,0.30) 65%, rgba(0,0,0,0.05) 100%)' }}
       />
-      {/* Yellow glow */}
+      {/* Bottom vignette */}
       <div
-        className="absolute bottom-0 left-0 w-[50vw] h-[40vh] blur-3xl pointer-events-none"
-        style={{ background: `radial-gradient(ellipse at bottom left, ${content.colors.accent}20 0%, transparent 70%)` }}
+        className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent)' }}
+      />
+      {/* Yellow glow bottom-left */}
+      <div
+        className="absolute bottom-0 left-0 w-[45vw] h-[35vh] blur-3xl pointer-events-none"
+        style={{ background: `radial-gradient(ellipse at bottom left, ${content.colors.accent}18 0%, transparent 70%)` }}
       />
 
       <motion.div
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 pb-14 sm:pb-20 lg:pb-24"
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12"
         style={{ y: contentY }}
       >
         <div className="max-w-2xl">
