@@ -38,12 +38,12 @@ export default function Trust({ mode, content }: TrustProps) {
           <img
             src="/images/kranken-bg.png"
             alt=""
-            className="absolute right-0 top-0 h-full w-auto max-w-none opacity-[0.13]"
+            className="absolute right-0 top-0 h-full w-auto max-w-none opacity-[0.28]"
             style={{ objectFit: 'cover', objectPosition: 'right center' }}
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right, #f8faf8 30%, rgba(248,250,248,0.75) 60%, rgba(248,250,248,0.15) 100%)' }}
+            style={{ background: 'linear-gradient(to right, #f8faf8 20%, rgba(248,250,248,0.55) 55%, rgba(248,250,248,0.05) 100%)' }}
           />
         </div>
       )}
