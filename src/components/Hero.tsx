@@ -44,7 +44,7 @@ export default function Hero({ mode, content }: HeroProps) {
           >
             {/* Image fills full column, top-aligned, no cropping */}
             <img
-              src="/images/hero-banner.jpg"
+              src="/images/hero-banner.png"
               alt="irmak Krankenfahrten"
               className="w-full h-full object-contain object-center"
               style={{ maxHeight: '100vh' }}
