@@ -32,6 +32,22 @@ export default function Trust({ mode, content }: TrustProps) {
       className="py-16 sm:py-24 lg:py-28 relative overflow-hidden"
       style={{ backgroundColor: isKranken ? '#f8faf8' : content.colors.secondary }}
     >
+      {/* Kranken: branded landscape background */}
+      {isKranken && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <img
+            src="/images/kranken-bg.png"
+            alt=""
+            className="absolute right-0 top-0 h-full w-auto max-w-none opacity-[0.13]"
+            style={{ objectFit: 'cover', objectPosition: 'right center' }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to right, #f8faf8 30%, rgba(248,250,248,0.75) 60%, rgba(248,250,248,0.15) 100%)' }}
+          />
+        </div>
+      )}
+
       {/* Subtle bg photo hint for Taxi */}
       {!isKranken && (
         <div className="absolute inset-0 pointer-events-none">
